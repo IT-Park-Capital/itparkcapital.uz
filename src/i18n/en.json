@@ -206,6 +206,9 @@
     "heroSubtitle": "The latest updates on programmes, partnerships, and key events across the industry.",
     "readMore": "Read more",
     "empty": "No news yet.",
+    "backToNews": "Back to news",
+    "loadError": "Failed to load the news item.",
+    "published": "Published",
     "categories": {
       "all": "All",
       "company": "Company",

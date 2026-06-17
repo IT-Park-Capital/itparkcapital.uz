@@ -206,6 +206,9 @@
     "heroSubtitle": "Dasturlarimiz, hamkorlik va IT sohasidagi muhim voqealardan xabardor bo'lib turing.",
     "readMore": "Batafsil",
     "empty": "Hozircha yangiliklar yo'q.",
+    "backToNews": "Yangiliklarga qaytish",
+    "loadError": "Yangilikni yuklab bo'lmadi.",
+    "published": "Chop etildi",
     "categories": {
       "all": "Barchasi",
       "company": "Kompaniya",
