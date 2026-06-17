@@ -1,0 +1,11 @@
+---
+import { PROGRAMS, type ProgramSlug } from '~/data/programs';
+import ProgramPage from '~/components/ProgramPage.astro';
+
+export function getStaticPaths() {
+  return PROGRAMS.map((p) => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params as { slug: ProgramSlug };
+---
+<ProgramPage locale="ru" slug={slug} />

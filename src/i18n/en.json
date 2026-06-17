@@ -1,0 +1,223 @@
+{
+  "meta": {
+    "siteName": "IT Park Capital",
+    "tagline": "Financing the digital future of Uzbekistan",
+    "description": "IT Park Capital — targeted loans for IT companies, the Zero Risk programme, the Bilgi marketplace, and M&A advisory. The financial institution supporting Uzbekistan's IT sector.",
+    "ogTitle": "IT Park Capital — Financial solutions for the IT sector",
+    "ogDescription": "Financing, expert support, and growth tools for IT companies expanding into international markets."
+  },
+  "nav": {
+    "programs": "Programmes",
+    "about": "About",
+    "news": "News",
+    "contact": "Contact",
+    "apply": "Login",
+    "topbarStatus": "Now accepting applications",
+    "topbarHighlight": "Zero Risk programme",
+    "menuLoans": "Targeted loans",
+    "menuProgrammes": "Government programmes",
+    "menuAdvisory": "Advisory",
+    "menuFeaturedTitle": "Not sure which one fits?",
+    "menuFeaturedBody": "Our specialist will analyse your business and recommend the right tool within 1 business day.",
+    "menuFeaturedCta": "Book a free consultation",
+    "mobileSection": "Main sections",
+    "all": "All programmes"
+  },
+  "lang": {
+    "current": "English",
+    "uz": "O'zbek",
+    "ru": "Русский",
+    "en": "English"
+  },
+  "hero": {
+    "eyebrow": "IT Park Capital",
+    "title": "Financing the digital future of Uzbekistan",
+    "subtitle": "Access financing and scaling tools to grow your IT company and expand into international markets.",
+    "ctaPrimary": "View programmes",
+    "ctaSecondary": "Get in touch",
+    "stats": {
+      "companies": "companies accepted",
+      "jobs": "jobs created",
+      "exportVolume": "annual export volume",
+      "centers": "training centres"
+    }
+  },
+  "programs": {
+    "sectionTag": "Our programmes",
+    "sectionTitle": "Financial solutions for IT business",
+    "sectionSubtitle": "Loans, government programmes, and advisory for IT companies at every stage.",
+    "viewAll": "View all",
+    "learnMore": "Learn more",
+    "applyNow": "Apply now",
+    "items": {
+      "it-companies": {
+        "title": "Targeted loan for IT companies and educational projects",
+        "shortTitle": "IT & education loan",
+        "summary": "Scaling educational centres and IT companies, opening new branches, and expanding teams.",
+        "tagline": "Targeted loan"
+      },
+      "it-export": {
+        "title": "Targeted loan for IT service exporters",
+        "shortTitle": "Export loan",
+        "summary": "Fulfilling export contract obligations, covering operating expenses, bridging cash flow gaps.",
+        "tagline": "Export"
+      },
+      "corporate-education": {
+        "title": "Targeted loan for corporate education of employees",
+        "shortTitle": "Corporate training",
+        "summary": "Upskilling IT company employees and creating new jobs.",
+        "tagline": "Education"
+      },
+      "zero-risk": {
+        "title": "Zero Risk Programme",
+        "shortTitle": "Zero Risk",
+        "summary": "Attracting IT and BPO companies to Uzbekistan — with offices, equipment, and subsidies.",
+        "tagline": "Government programme"
+      },
+      "bilgi": {
+        "title": "Bilgi Marketplace",
+        "shortTitle": "Bilgi",
+        "summary": "100+ training centres, 520+ IT courses, and instalment plans for ages 16–35.",
+        "tagline": "Marketplace"
+      },
+      "ma-advisory": {
+        "title": "M&A and financial advisory",
+        "shortTitle": "M&A advisory",
+        "summary": "End-to-end support for IT companies on mergers and acquisitions.",
+        "tagline": "Advisory"
+      }
+    }
+  },
+  "results": {
+    "sectionTag": "Results",
+    "sectionTitle": "Our impact in numbers",
+    "sectionSubtitle": "Real businesses, real outcomes — through the IT Park Capital ecosystem."
+  },
+  "about": {
+    "sectionTag": "About us",
+    "sectionTitle": "Financial support for the IT sector",
+    "lead": "IT Park Capital is the financial institution supporting Uzbekistan's IT sector.",
+    "missionTag": "Our mission",
+    "missionTitle": "A sustainable ecosystem for IT company growth",
+    "readMore": "Read full story",
+    "establishedPill": "Operating since 2021",
+    "credentials": {
+      "founded": "Founded",
+      "foundedValue": "2021",
+      "mandate": "Mandate",
+      "mandateValue": "CoM Decree №556",
+      "sector": "Sector",
+      "sectorValue": "IT and BPO",
+      "status": "Status",
+      "statusValue": "Active"
+    },
+    "pillarsTitle": "Areas of support",
+    "pillarsSubtitle": "Our work spans three directions — within a single ecosystem.",
+    "missionSign": "— IT Park Capital",
+    "timelineTitle": "How the organisation evolved",
+    "timelineSubtitle": "From an education hub to a financial institution.",
+    "missionEyebrow": "Mission",
+    "storyEyebrow": "Story"
+  },
+  "cta": {
+    "title": "Ready to find a tailored solution?",
+    "subtitle": "We'll review your situation and recommend the right financial instrument.",
+    "primary": "Book consultation",
+    "secondary": "View programmes"
+  },
+  "program": {
+    "purposeTitle": "How the loan can be used",
+    "termsTitle": "Loan terms",
+    "requirementsTitle": "Borrower requirements",
+    "benefitsTitle": "Programme benefits",
+    "criteriaTitle": "Eligibility criteria",
+    "resultsTitle": "Programme results",
+    "termsTitle2": "Terms",
+    "whoTitle": "Who it suits",
+    "whatTitle": "What we do",
+    "applyTitle": "Apply now",
+    "applySubtitle": "Our specialist will reach out within 1 business day.",
+    "backToPrograms": "Back to programmes",
+    "relatedTitle": "Other programmes",
+    "glanceFigures": "Key figures"
+  },
+  "contact": {
+    "title": "Contact",
+    "heroTitle": "Let's talk about your project",
+    "subtitle": "Write to us or get in touch directly. We reply within 1 business day.",
+    "responseBadge": "Reply within 1 business day",
+    "methodsTitle": "Get in touch",
+    "methodCallTitle": "Give us a call",
+    "methodCallSub": "Mon–Fri, 09:00–18:00",
+    "methodEmailTitle": "Send an email",
+    "methodEmailSub": "Anytime — we reply same business day",
+    "methodVisitTitle": "Visit our office",
+    "methodVisitSub": "Tashkent IT Park, by appointment",
+    "expectTitle": "What happens next",
+    "expectSubtitle": "A clear, simple, and quick process.",
+    "expect1Title": "Submit your inquiry",
+    "expect1Body": "Tell us briefly about your business via the form or email.",
+    "expect2Title": "Review and recommendation",
+    "expect2Body": "Our specialist studies your situation and recommends the right programme.",
+    "expect3Title": "Free consultation call",
+    "expect3Body": "We schedule a convenient time and discuss detailed terms.",
+    "formTitle": "Submit a request",
+    "formSubtitle": "Fill out the form below and we'll get back to you.",
+    "name": "Name",
+    "namePh": "First Last",
+    "email": "Email",
+    "emailPh": "you@company.uz",
+    "phone": "Phone",
+    "phonePh": "+998 __ ___ __ __",
+    "company": "Company",
+    "companyPh": "Company name",
+    "interest": "Programme of interest",
+    "interestPh": "Choose a programme",
+    "interestNone": "No specific programme",
+    "message": "Message",
+    "messagePh": "Briefly about your project",
+    "submit": "Send",
+    "submitting": "Sending…",
+    "success": "Thank you! Your request has been received. We'll be in touch soon.",
+    "consent": "By submitting, you consent to the processing of your personal data.",
+    "infoTitle": "Get in touch",
+    "addressLabel": "Address",
+    "address": "Tashkent, IT Park",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone",
+    "hoursLabel": "Hours",
+    "hours": "Mon–Fri, 09:00–18:00"
+  },
+  "footer": {
+    "tagline": "IT Park Capital — financial solutions for Uzbekistan's digital economy.",
+    "programsTitle": "Programmes",
+    "companyTitle": "Company",
+    "contactTitle": "Contact",
+    "rights": "All rights reserved.",
+    "privacy": "Privacy policy",
+    "terms": "Terms of use",
+    "aboutLink": "About",
+    "newsLink": "News",
+    "contactLink": "Contact"
+  },
+  "news": {
+    "heroEyebrow": "News",
+    "heroTitle": "IT Park Capital news",
+    "heroSubtitle": "The latest updates on programmes, partnerships, and key events across the industry.",
+    "readMore": "Read more",
+    "empty": "No news yet.",
+    "categories": {
+      "all": "All",
+      "company": "Company",
+      "programs": "Programmes",
+      "events": "Events",
+      "partnerships": "Partnerships"
+    }
+  },
+  "common": {
+    "skipToContent": "Skip to main content",
+    "menuOpen": "Open menu",
+    "menuClose": "Close menu",
+    "scrollTop": "Top"
+  }
+}

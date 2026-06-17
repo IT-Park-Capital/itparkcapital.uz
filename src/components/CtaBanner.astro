@@ -1,0 +1,55 @@
+---
+import { localePath, type Locale } from '~/i18n';
+import Icon from '~/components/Icon.astro';
+
+interface Props {
+  locale: Locale;
+  dict: any;
+  variant?: 'default' | 'compact';
+}
+
+const { locale, dict, variant = 'default' } = Astro.props;
+---
+
+<section class="container-page py-12 md:py-16">
+  <div class={`cta-banner reveal relative overflow-hidden rounded-2xl md:rounded-3xl ${variant === 'compact' ? 'p-7 md:p-10' : 'p-8 md:p-14'}`}>
+    <div class="cta-pattern" aria-hidden="true"></div>
+    <div class="relative grid gap-7 lg:grid-cols-12 lg:items-center">
+      <div class="lg:col-span-7">
+        <h2 class={`font-semibold tracking-[-0.025em] leading-[1.1] text-white ${variant === 'compact' ? 'text-[1.5rem] md:text-[1.75rem]' : 'text-[1.75rem] md:text-[2.25rem]'}`}>
+          {dict.cta.title}
+        </h2>
+        <p class="mt-4 text-[1rem] md:text-[1.0625rem] leading-relaxed text-white/70 max-w-xl">
+          {dict.cta.subtitle}
+        </p>
+      </div>
+      <div class="lg:col-span-5 lg:flex lg:justify-end">
+        <div class="flex flex-wrap gap-3">
+          <a href={localePath(locale, 'contact')} class="btn btn-primary">
+            {dict.cta.primary}
+            <Icon name="arrow-right" class="h-4 w-4" />
+          </a>
+          <a href={localePath(locale, 'programs/zero-risk')} class="btn !bg-white/10 !text-white !border !border-white/15 hover:!bg-white/15 hover:!border-white/25">
+            {dict.cta.secondary}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-banner {
+    background: linear-gradient(135deg, #131a28 0%, #040e1e 60%, #0a1e2a 100%);
+    box-shadow: 0 18px 60px rgba(4, 14, 30, 0.18);
+  }
+
+  .cta-pattern {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 600px 300px at 90% 0%, rgba(133, 188, 50, 0.20), transparent 60%),
+      radial-gradient(ellipse 500px 250px at 0% 100%, rgba(133, 188, 50, 0.10), transparent 70%);
+    pointer-events: none;
+  }
+</style>

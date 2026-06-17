@@ -1,0 +1,153 @@
+---
+import { localePath, type Locale } from '~/i18n';
+import { programsOrdered } from '~/data/programs';
+import Icon from '~/components/Icon.astro';
+
+interface Props {
+  locale: Locale;
+  dict: any;
+  excludeSlug?: string;
+  title?: string;
+  subtitle?: string;
+  tag?: string;
+}
+
+const { locale, dict, excludeSlug, title, subtitle, tag } = Astro.props;
+const programs = programsOrdered().filter((p) => p.slug !== excludeSlug);
+---
+
+<section class="container-page py-16 md:py-24">
+  <div class="max-w-2xl reveal">
+    <span class="section-tag">{tag ?? dict.programs.sectionTag}</span>
+    <h2 class="mt-4 text-[1.875rem] md:text-[2.5rem] font-semibold tracking-[-0.025em] leading-[1.1] text-ink-950">
+      {title ?? dict.programs.sectionTitle}
+    </h2>
+    <p class="mt-4 text-[1.0625rem] leading-relaxed text-ink-500">
+      {subtitle ?? dict.programs.sectionSubtitle}
+    </p>
+  </div>
+
+  <div class="mt-12 grid gap-4 md:gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    {programs.map((p, i) => (
+      <a
+        href={localePath(locale, `programs/${p.slug}`)}
+        class={`program-card group reveal flex flex-col gap-5 p-6 md:p-7 rounded-2xl transition-all ${
+          p.accent === 'green' ? 'is-green' : p.accent === 'dark' ? 'is-dark' : 'is-light'
+        }`}
+        style={`transition-delay: ${i * 60}ms`}
+      >
+        <div class="flex items-center justify-between">
+          <span class="program-icon grid place-items-center h-11 w-11 rounded-xl">
+            <Icon name={p.icon} class="h-5 w-5" strokeWidth={1.7} />
+          </span>
+          <span class="program-tagline text-[11.5px] font-semibold uppercase tracking-[0.12em]">
+            {p.content[locale].kind === 'loan' ? dict.programs.items[p.slug].tagline :
+             p.slug === 'zero-risk' ? dict.programs.items['zero-risk'].tagline :
+             p.slug === 'bilgi' ? dict.programs.items['bilgi'].tagline :
+             dict.programs.items['ma-advisory'].tagline}
+          </span>
+        </div>
+
+        <div class="flex-1">
+          <h3 class="text-[18px] md:text-[19px] font-semibold tracking-tight leading-snug program-title">
+            {p.content[locale].shortTitle}
+          </h3>
+          <p class="mt-2.5 text-[14px] leading-relaxed program-summary line-clamp-3">
+            {p.content[locale].summary}
+          </p>
+        </div>
+
+        <span class="inline-flex items-center gap-1.5 text-[13.5px] font-medium program-cta">
+          {dict.programs.learnMore}
+          <span class="program-arrow inline-flex transition-transform">
+            <Icon name="arrow-right" class="h-3.5 w-3.5" />
+          </span>
+        </span>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .program-card {
+    position: relative;
+    border: 1px solid var(--color-hairline);
+    background: white;
+    min-height: 240px;
+  }
+
+  .program-card.is-light {
+    background: white;
+    color: var(--color-ink-950);
+  }
+  .program-card.is-light .program-icon {
+    background: var(--color-brand-100);
+    color: var(--color-brand-800);
+  }
+  .program-card.is-light .program-tagline {
+    color: var(--color-ink-400);
+  }
+  .program-card.is-light .program-summary {
+    color: var(--color-ink-500);
+  }
+  .program-card.is-light .program-cta {
+    color: var(--color-ink-950);
+  }
+
+  .program-card.is-green {
+    background: linear-gradient(150deg, #c8e8a4 0%, #85bc32 100%);
+    border-color: transparent;
+    color: var(--color-ink-950);
+    box-shadow: 0 4px 20px rgba(133, 188, 50, 0.18);
+  }
+  .program-card.is-green .program-icon {
+    background: rgba(4, 14, 30, 0.92);
+    color: var(--color-brand-400);
+  }
+  .program-card.is-green .program-tagline {
+    color: rgba(4, 14, 30, 0.7);
+  }
+  .program-card.is-green .program-summary {
+    color: rgba(4, 14, 30, 0.78);
+  }
+  .program-card.is-green .program-cta {
+    color: var(--color-ink-950);
+  }
+
+  .program-card.is-dark {
+    background: linear-gradient(160deg, #131a28 0%, #040e1e 100%);
+    border-color: transparent;
+    color: white;
+    box-shadow: 0 4px 20px rgba(4, 14, 30, 0.16);
+  }
+  .program-card.is-dark .program-icon {
+    background: rgba(133, 188, 50, 0.18);
+    color: var(--color-brand-400);
+  }
+  .program-card.is-dark .program-tagline {
+    color: rgba(255, 255, 255, 0.5);
+  }
+  .program-card.is-dark .program-summary {
+    color: rgba(255, 255, 255, 0.72);
+  }
+  .program-card.is-dark .program-cta {
+    color: var(--color-brand-400);
+  }
+
+  .program-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--color-edge);
+  }
+
+  .program-card.is-green:hover {
+    box-shadow: 0 12px 36px rgba(133, 188, 50, 0.32);
+  }
+
+  .program-card.is-dark:hover {
+    box-shadow: 0 12px 36px rgba(4, 14, 30, 0.28);
+  }
+
+  .program-card:hover .program-arrow {
+    transform: translateX(4px);
+  }
+</style>

@@ -1,0 +1,1177 @@
+---
+import { type Locale, getDict, localePath } from '~/i18n';
+import { getProgram, programsOrdered, type ProgramSlug } from '~/data/programs';
+import Base from '~/layouts/Base.astro';
+import Icon from '~/components/Icon.astro';
+import CtaBanner from '~/components/CtaBanner.astro';
+
+interface Props {
+  locale: Locale;
+  slug: ProgramSlug;
+}
+
+const { locale, slug } = Astro.props;
+const dict = getDict(locale);
+const program = getProgram(slug);
+const content = program.content[locale];
+const related = programsOrdered().filter((p) => p.slug !== slug).slice(0, 3);
+
+const pageTitle = `${content.title} — IT Park Capital`;
+const description = content.summary;
+const heroAccent = program.accent;
+
+const programJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': content.kind === 'loan' ? 'LoanOrCredit' : 'FinancialProduct',
+  name: content.title,
+  description: content.summary,
+  provider: { '@id': 'https://itparkcapital.uz/#organization' },
+  ...(content.kind === 'loan' && {
+    loanTerm: 'P3Y',
+    interestRate: 'Refinancing rate + 4%',
+    amount: { '@type': 'MonetaryAmount', minValue: 100000000, maxValue: 5000000000, currency: 'UZS' },
+  }),
+};
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: dict.meta.siteName, item: `https://itparkcapital.uz${localePath(locale)}` },
+    { '@type': 'ListItem', position: 2, name: dict.nav.programs, item: `https://itparkcapital.uz${localePath(locale)}#programs` },
+    { '@type': 'ListItem', position: 3, name: content.shortTitle },
+  ],
+};
+
+const heroAccentClass =
+  heroAccent === 'green' ? 'is-green' :
+  heroAccent === 'dark' ? 'is-dark' : 'is-light';
+---
+
+<Base
+  title={pageTitle}
+  description={description}
+  locale={locale}
+  type="article"
+  jsonLd={[programJsonLd, breadcrumbJsonLd]}
+>
+  {/* HERO */}
+  <section class={`program-hero ${heroAccentClass}`}>
+    <div class="program-hero-bg" aria-hidden="true"></div>
+    <div class="container-page program-hero-inner">
+      <a href={localePath(locale)} class="back-link">
+        <Icon name="arrow-left" class="h-3.5 w-3.5" />
+        {dict.program.backToPrograms}
+      </a>
+
+      <div class={`hero-grid ${content.kind === 'advisory' ? 'hero-grid-single' : ''}`}>
+        <div class="hero-text">
+          <div class="hero-eyebrow reveal">
+            <span class="hero-eyebrow-bar" aria-hidden="true"></span>
+            <span>{dict.programs.items[slug].tagline}</span>
+          </div>
+
+          <h1 class="hero-title reveal" style="transition-delay: 60ms">
+            {content.title}
+          </h1>
+
+          <p class="hero-intro reveal" style="transition-delay: 140ms">
+            {content.intro}
+          </p>
+
+          <div class="hero-actions reveal" style="transition-delay: 220ms">
+            <a href="https://my.itparkcapital.uz" target="_blank" rel="noopener noreferrer" class="hero-btn hero-btn-primary">
+              {dict.programs.applyNow}
+              <Icon name="arrow-right" class="h-4 w-4" />
+            </a>
+          </div>
+        </div>
+
+        {/* AT A GLANCE CARD */}
+        {content.kind === 'loan' && (
+          <aside class="glance reveal" style="transition-delay: 100ms">
+            <header class="glance-head">
+              <span class="glance-eyebrow">{dict.program.termsTitle}</span>
+              <span class="glance-icon">
+                <Icon name="spark" class="h-4 w-4" />
+              </span>
+            </header>
+            <dl class="glance-list">
+              {content.terms.map((term) => {
+                const [label, value] = term.includes(':') ? term.split(/:\s+/) : [term, ''];
+                return (
+                  <div class="glance-row">
+                    <dt class="glance-label">{label}</dt>
+                    {value && <dd class="glance-value tabular-nums">{value}</dd>}
+                  </div>
+                );
+              })}
+            </dl>
+          </aside>
+        )}
+
+        {content.kind === 'zero-risk' && (
+          <aside class="glance reveal" style="transition-delay: 100ms">
+            <header class="glance-head">
+              <span class="glance-eyebrow">{dict.program.glanceFigures}</span>
+              <span class="glance-icon">
+                <Icon name="shield" class="h-4 w-4" />
+              </span>
+            </header>
+            <div class="glance-stats">
+              {content.results.slice(0, 3).map((r) => (
+                <div class="glance-stat">
+                  <span class="glance-stat-value tabular-nums">{r.value}</span>
+                  <span class="glance-stat-label">{r.label}</span>
+                </div>
+              ))}
+            </div>
+          </aside>
+        )}
+
+        {content.kind === 'bilgi' && (
+          <aside class="glance reveal" style="transition-delay: 100ms">
+            <header class="glance-head">
+              <span class="glance-eyebrow">{dict.program.termsTitle2}</span>
+              <span class="glance-icon">
+                <Icon name="clock" class="h-4 w-4" />
+              </span>
+            </header>
+            <ul class="glance-check-list">
+              {content.terms.map((t) => (
+                <li class="glance-check-row">
+                  <span class="glance-check-icon">
+                    <Icon name="check" class="h-3 w-3" strokeWidth={2.6} />
+                  </span>
+                  <span class="glance-check-text">{t}</span>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        )}
+      </div>
+    </div>
+  </section>
+
+  {/* ===================== LOAN ===================== */}
+  {content.kind === 'loan' && (
+    <>
+      <section class="container-page py-16 md:py-24">
+        <div class="reveal mb-2">
+          <span class="section-tag">{dict.program.purposeTitle}</span>
+        </div>
+        <ul class="check-list">
+          {content.purpose.map((item) => (
+            <li class="check-row">
+              <span class="check-icon">
+                <Icon name="check" class="h-3.5 w-3.5" strokeWidth={2.4} />
+              </span>
+              <span class="check-text">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="container-page py-12 md:py-16">
+        <div class="reveal mb-8">
+          <span class="section-tag">{dict.program.requirementsTitle}</span>
+        </div>
+        <ol class="num-list">
+          {content.requirements.map((req, i) => (
+            <li class="num-row reveal" style={`transition-delay: ${i * 40}ms`}>
+              <span class="num-marker tabular-nums">0{i + 1}</span>
+              <span class="num-text">{req}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+    </>
+  )}
+
+  {/* ===================== ZERO RISK ===================== */}
+  {content.kind === 'zero-risk' && (
+    <>
+      <section class="container-page py-16 md:py-24">
+        <div class="reveal mb-10 md:mb-12">
+          <span class="section-tag">{dict.program.benefitsTitle}</span>
+        </div>
+        <ol class="num-list">
+          {content.benefits.map((b, i) => (
+            <li class="num-row reveal" style={`transition-delay: ${i * 40}ms`}>
+              <span class="num-marker tabular-nums">0{i + 1}</span>
+              <span class="num-text">{b}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section class="container-page py-12 md:py-16">
+        <div class="results-block results-block-dark reveal">
+          <header class="results-head">
+            <span class="results-eyebrow">{dict.program.resultsTitle}</span>
+            <span class="results-icon">
+              <Icon name="shield" class="h-5 w-5" />
+            </span>
+          </header>
+          <div class="results-grid">
+            {content.results.map((r) => (
+              <div class="results-cell">
+                <span class="results-value tabular-nums" data-counter={r.value}>
+                  {r.value}
+                </span>
+                <span class="results-label">{r.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="container-page py-12 md:py-16">
+        <div class="reveal mb-2">
+          <span class="section-tag">{dict.program.criteriaTitle}</span>
+        </div>
+        <ul class="check-list">
+          {content.criteria.map((c) => (
+            <li class="check-row">
+              <span class="check-icon">
+                <Icon name="check" class="h-3.5 w-3.5" strokeWidth={2.4} />
+              </span>
+              <span class="check-text">{c}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </>
+  )}
+
+  {/* ===================== BILGI ===================== */}
+  {content.kind === 'bilgi' && (
+    <>
+      <section class="container-page py-16 md:py-24">
+        <div class="reveal mb-2">
+          <span class="section-tag">{dict.program.resultsTitle}</span>
+        </div>
+        <div class="bilgi-stats">
+          {content.results.map((r) => (
+            <div class="bilgi-stat">
+              <span class="bilgi-stat-value tabular-nums" data-counter={r.value}>
+                {r.value}
+              </span>
+              <span class="bilgi-stat-label">{r.label}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="container-page py-12 md:py-16">
+        <div class="reveal mb-8 md:mb-10">
+          <span class="section-tag">
+            {locale === 'uz' ? "Eng mashhur yo'nalishlar (2025)" : locale === 'ru' ? "Топ направлений (2025)" : "Top course directions (2025)"}
+          </span>
+        </div>
+        <div class="bar-chart reveal">
+          {content.topCourses.map((c, i) => (
+            <div class="bar-row" style={`--bar-delay: ${i * 60}ms`}>
+              <span class="bar-name">{c.name}</span>
+              <div class="bar-track" aria-hidden="true">
+                <div class="bar-fill" style={`--bar-share: ${c.share}%`}></div>
+              </div>
+              <span class="bar-value tabular-nums">{c.share}%</span>
+            </div>
+          ))}
+        </div>
+      </section>
+    </>
+  )}
+
+  {/* ===================== ADVISORY ===================== */}
+  {content.kind === 'advisory' && (
+    <>
+      <section class="container-page py-16 md:py-24">
+        <div class="reveal mb-10 md:mb-12">
+          <span class="section-tag">{dict.program.whatTitle}</span>
+        </div>
+        <ol class="num-list num-list-detailed">
+          {content.what.map((item, i) => {
+            const [head, ...rest] = item.split(' — ');
+            const body = rest.join(' — ');
+            return (
+              <li class="num-row reveal" style={`transition-delay: ${i * 40}ms`}>
+                <span class="num-marker tabular-nums">0{i + 1}</span>
+                <div class="num-detailed-body">
+                  <span class="num-detailed-title">{head}</span>
+                  {body && <span class="num-detailed-sub">{body}</span>}
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      </section>
+
+      <section class="container-page py-12 md:py-16">
+        <div class="reveal mb-2">
+          <span class="section-tag">{dict.program.whoTitle}</span>
+        </div>
+        <ul class="check-list">
+          {content.who.map((w) => (
+            <li class="check-row">
+              <span class="check-icon">
+                <Icon name="check" class="h-3.5 w-3.5" strokeWidth={2.4} />
+              </span>
+              <span class="check-text">{w}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </>
+  )}
+
+  <CtaBanner locale={locale} dict={dict} variant="compact" />
+
+  {/* ===================== RELATED ===================== */}
+  <section class="container-page py-12 md:py-16">
+    <div class="reveal mb-8 md:mb-10">
+      <span class="section-tag">{dict.program.relatedTitle}</span>
+    </div>
+    <div class="related-grid">
+      {related.map((p, i) => (
+        <a href={localePath(locale, `programs/${p.slug}`)} class="related-card reveal" style={`transition-delay: ${i * 50}ms`}>
+          <header class="related-head">
+            <span class={`related-icon related-icon-${p.accent}`}>
+              <Icon name={p.icon} class="h-4.5 w-4.5" strokeWidth={1.7} />
+            </span>
+            <span class="related-arrow">
+              <Icon name="arrow-right" class="h-4 w-4" />
+            </span>
+          </header>
+          <h3 class="related-title">{p.content[locale].shortTitle}</h3>
+          <p class="related-sub">{p.content[locale].summary}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ============================================================
+     HERO — single column, editorial
+     ============================================================ */
+  .program-hero {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--color-hairline);
+  }
+  .program-hero-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .program-hero-inner {
+    position: relative;
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+  }
+  @media (min-width: 768px) {
+    .program-hero-inner {
+      padding-top: 3rem;
+      padding-bottom: 6rem;
+    }
+  }
+
+  .program-hero.is-light {
+    background: linear-gradient(180deg, var(--color-canvas) 0%, white 100%);
+  }
+  .program-hero.is-light .program-hero-bg {
+    background: radial-gradient(ellipse 700px 350px at 80% 10%, rgba(133, 188, 50, 0.10), transparent 65%);
+  }
+
+  .program-hero.is-green {
+    background: linear-gradient(170deg, #e3f3cf 0%, #c8e8a4 100%);
+  }
+  .program-hero.is-green .program-hero-bg {
+    background: radial-gradient(ellipse 600px 300px at 90% 0%, rgba(255, 255, 255, 0.4), transparent 60%);
+  }
+
+  .program-hero.is-dark {
+    background: linear-gradient(170deg, #131a28 0%, #040e1e 100%);
+  }
+  .program-hero.is-dark .program-hero-bg {
+    background:
+      radial-gradient(ellipse 700px 350px at 90% 10%, rgba(133, 188, 50, 0.18), transparent 60%),
+      radial-gradient(ellipse 500px 250px at 0% 80%, rgba(133, 188, 50, 0.10), transparent 70%);
+  }
+
+  /* Back link */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-ink-500);
+    text-decoration: none;
+    transition: color 0.18s ease, transform 0.18s ease;
+    margin-bottom: 2.5rem;
+  }
+  .back-link:hover {
+    color: var(--color-ink-950);
+    transform: translateX(-2px);
+  }
+  .program-hero.is-dark .back-link { color: rgba(255, 255, 255, 0.55); }
+  .program-hero.is-dark .back-link:hover { color: white; }
+  .program-hero.is-green .back-link { color: rgba(4, 14, 30, 0.6); }
+  .program-hero.is-green .back-link:hover { color: var(--color-ink-950); }
+
+  /* Hero grid (text + glance) */
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    align-items: end;
+  }
+  @media (min-width: 1024px) {
+    .hero-grid {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: 3rem;
+    }
+  }
+  .hero-grid-single {
+    grid-template-columns: 1fr;
+  }
+
+  /* Eyebrow */
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-size: 11.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-brand-700);
+  }
+  .hero-eyebrow-bar {
+    display: inline-block;
+    width: 18px;
+    height: 1px;
+    background: var(--color-brand-500);
+  }
+  .program-hero.is-dark .hero-eyebrow { color: var(--color-brand-400); }
+  .program-hero.is-dark .hero-eyebrow-bar { background: var(--color-brand-400); }
+  .program-hero.is-green .hero-eyebrow { color: var(--color-brand-800); }
+  .program-hero.is-green .hero-eyebrow-bar { background: var(--color-ink-950); opacity: 0.7; }
+
+  /* Title */
+  .hero-title {
+    margin-top: 1.25rem;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 600;
+    letter-spacing: -0.028em;
+    line-height: 1.05;
+    color: var(--color-ink-950);
+    max-width: 22ch;
+  }
+  .program-hero.is-dark .hero-title { color: white; }
+
+  /* Intro */
+  .hero-intro {
+    margin-top: 1.5rem;
+    font-size: clamp(1.0625rem, 1.5vw, 1.1875rem);
+    line-height: 1.6;
+    color: var(--color-ink-600);
+    max-width: 56ch;
+  }
+  .program-hero.is-dark .hero-intro { color: rgba(255, 255, 255, 0.7); }
+  .program-hero.is-green .hero-intro { color: rgba(4, 14, 30, 0.78); }
+
+  /* Actions */
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2.25rem;
+  }
+  .hero-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 1.25rem;
+    height: 48px;
+    border-radius: 9px;
+    font-size: 14.5px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    text-decoration: none;
+    transition: background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .hero-btn-primary {
+    background: var(--color-brand-500);
+    color: white;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 4px 12px rgba(133, 188, 50, 0.24);
+  }
+  .hero-btn-primary:hover {
+    background: var(--color-brand-400);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 8px 22px rgba(133, 188, 50, 0.36);
+  }
+  .hero-btn-primary:hover svg { transform: translateX(2px); transition: transform 0.18s ease; }
+
+  /* ============================================================
+     GLANCE CARD — hero side panel with key data
+     ============================================================ */
+  .glance {
+    align-self: end;
+    background: white;
+    border: 1px solid var(--color-hairline);
+    border-radius: 16px;
+    padding: 1.25rem 1.25rem 0.625rem;
+    box-shadow: 0 1px 2px rgba(4, 14, 30, 0.04), 0 12px 32px -16px rgba(4, 14, 30, 0.12);
+    backdrop-filter: blur(8px);
+    width: 100%;
+  }
+  @media (min-width: 768px) {
+    .glance { padding: 1.5rem 1.5rem 0.75rem; }
+  }
+
+  /* Variant for dark hero — glassmorphic */
+  .program-hero.is-dark .glance {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.10);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 12px 40px -8px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Variant for green hero */
+  .program-hero.is-green .glance {
+    background: rgba(255, 255, 255, 0.92);
+    border-color: rgba(255, 255, 255, 0.7);
+  }
+
+  .glance-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.875rem;
+    margin-bottom: 0.25rem;
+    border-bottom: 1px solid var(--color-hairline);
+  }
+  .program-hero.is-dark .glance-head {
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .glance-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-ink-400);
+  }
+  .program-hero.is-dark .glance-eyebrow {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .glance-icon {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    background: var(--color-brand-100);
+    color: var(--color-brand-700);
+  }
+  .program-hero.is-dark .glance-icon {
+    background: rgba(133, 188, 50, 0.15);
+    color: var(--color-brand-400);
+  }
+
+  /* Glance — terms list (loan) */
+  .glance-list { margin: 0; padding: 0; }
+  .glance-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 0.75rem 0;
+    border-bottom: 1px dashed var(--color-hairline);
+  }
+  .glance-row:last-child { border-bottom: 0; padding-bottom: 1.25rem; }
+  .program-hero.is-dark .glance-row {
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+  }
+
+  .glance-label {
+    font-size: 13px;
+    color: var(--color-ink-500);
+    line-height: 1.4;
+  }
+  .program-hero.is-dark .glance-label {
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .glance-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-ink-950);
+    text-align: right;
+    letter-spacing: -0.005em;
+  }
+  .program-hero.is-dark .glance-value {
+    color: white;
+  }
+
+  /* Glance — stats (zero risk) */
+  .glance-stats {
+    display: grid;
+    gap: 1rem;
+    padding: 0.625rem 0 1.25rem;
+  }
+  .glance-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-bottom: 0.875rem;
+    border-bottom: 1px dashed var(--color-hairline);
+  }
+  .glance-stat:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+  .program-hero.is-dark .glance-stat {
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+  }
+  .glance-stat-value {
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.022em;
+    color: var(--color-ink-950);
+  }
+  .program-hero.is-dark .glance-stat-value {
+    color: white;
+  }
+  .glance-stat-label {
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--color-ink-500);
+  }
+  .program-hero.is-dark .glance-stat-label {
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  /* Glance — check list (bilgi) */
+  .glance-check-list {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 0 1rem;
+    display: grid;
+    gap: 0.625rem;
+  }
+  .glance-check-row {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 0.625rem;
+    align-items: start;
+  }
+  .glance-check-icon {
+    display: grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    background: var(--color-brand-100);
+    color: var(--color-brand-700);
+    margin-top: 2px;
+  }
+  .glance-check-text {
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--color-ink-800);
+    letter-spacing: -0.005em;
+  }
+  .program-hero.is-dark .glance-check-text {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  /* ============================================================
+     CHECK LIST — 2-col grid of check cards (purpose / criteria / who)
+     ============================================================ */
+  .check-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.75rem 0 0;
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 768px) {
+    .check-list { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .check-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 0.875rem;
+    align-items: start;
+    padding: 1.125rem 1.25rem;
+    background: white;
+    border: 1px solid var(--color-hairline);
+    border-radius: 12px;
+    transition: border-color 0.22s ease, background 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+    overflow: hidden;
+  }
+  .check-row::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--color-brand-500);
+    transform: translateX(-2px);
+    transition: transform 0.22s ease;
+  }
+  .check-row:hover {
+    border-color: var(--color-brand-200);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px -6px rgba(133, 188, 50, 0.16);
+  }
+  .check-row:hover::before {
+    transform: translateX(0);
+  }
+
+  .check-icon {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    background: var(--color-brand-100);
+    color: var(--color-brand-700);
+    margin-top: 1px;
+    transition: background 0.22s ease, color 0.22s ease, transform 0.22s ease;
+  }
+  .check-row:hover .check-icon {
+    background: var(--color-brand-500);
+    color: var(--color-ink-950);
+    transform: scale(1.06);
+  }
+  .check-text {
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--color-ink-800);
+    letter-spacing: -0.005em;
+    align-self: center;
+  }
+
+  /* ===== Tight variant (used in glance card) — keeps simple rows ===== */
+  .check-list-tight {
+    display: block;
+    border-top: 0;
+    margin-top: 1.25rem;
+  }
+  .check-list-tight .check-row {
+    grid-template-columns: 22px 1fr;
+    padding: 0.625rem 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+  }
+  .check-list-tight .check-row::before { display: none; }
+  .check-list-tight .check-row:hover {
+    background: transparent;
+    transform: none;
+    box-shadow: none;
+  }
+  .check-list-tight .check-row + .check-row {
+    border-top: 1px solid var(--color-hairline);
+  }
+  .check-list-tight .check-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* ============================================================
+     NUM LIST — 2-col grid with editorial number markers
+     ============================================================ */
+  .num-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.75rem 0 0;
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 768px) {
+    .num-list { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .num-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.25rem;
+    align-items: start;
+    padding: 1.375rem 1.5rem;
+    background: white;
+    border: 1px solid var(--color-hairline);
+    border-radius: 12px;
+    transition: border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+    overflow: hidden;
+  }
+  .num-row:hover {
+    border-color: var(--color-edge);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px -6px rgba(4, 14, 30, 0.08);
+  }
+
+  .num-marker {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--color-ink-200);
+    line-height: 0.9;
+    padding-top: 2px;
+    transition: color 0.22s ease;
+  }
+  .num-row:hover .num-marker {
+    color: var(--color-brand-500);
+  }
+
+  .num-text {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--color-ink-800);
+    letter-spacing: -0.005em;
+    align-self: center;
+  }
+
+  /* ===== Detailed variant (advisory "what we do") — title + body ===== */
+  .num-list-detailed .num-row {
+    align-items: start;
+    padding: 1.5rem 1.625rem;
+  }
+  .num-list-detailed .num-marker {
+    padding-top: 0;
+  }
+  .num-detailed-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+  .num-detailed-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-ink-950);
+    letter-spacing: -0.012em;
+    line-height: 1.35;
+  }
+  .num-detailed-sub {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--color-ink-500);
+  }
+
+  /* ============================================================
+     SPEC CARD — financial document style
+     ============================================================ */
+  .spec-card {
+    background: white;
+    border: 1px solid var(--color-hairline);
+    border-radius: 16px;
+    padding: 1.5rem 1.5rem 1rem;
+    box-shadow: 0 1px 2px rgba(4, 14, 30, 0.03);
+    position: sticky;
+    top: 6rem;
+  }
+  @media (min-width: 768px) {
+    .spec-card { padding: 1.75rem 1.75rem 1.25rem; }
+  }
+  .spec-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-hairline);
+  }
+  .spec-card-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-ink-400);
+  }
+  .spec-card-icon {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--color-brand-100);
+    color: var(--color-brand-700);
+  }
+
+  .spec-list {
+    margin: 0;
+    padding: 0;
+  }
+  .spec-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 0.875rem 0;
+    border-bottom: 1px dashed var(--color-hairline);
+  }
+  .spec-row:last-child { border-bottom: 0; }
+  .spec-label {
+    font-size: 13.5px;
+    color: var(--color-ink-500);
+    line-height: 1.4;
+  }
+  .spec-value {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--color-ink-950);
+    text-align: right;
+    letter-spacing: -0.005em;
+  }
+
+  /* ============================================================
+     RESULTS BLOCK — dark stats panel
+     ============================================================ */
+  .results-block {
+    border-radius: 24px;
+    padding: 1.75rem;
+    position: relative;
+    overflow: hidden;
+  }
+  @media (min-width: 768px) {
+    .results-block { padding: 2.5rem; }
+  }
+  .results-block-dark {
+    background: linear-gradient(160deg, #1a2334 0%, #040e1e 100%);
+    border: 1px solid rgba(133, 188, 50, 0.08);
+  }
+  .results-block-dark::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 500px 250px at 100% 0%, rgba(133, 188, 50, 0.16), transparent 70%);
+    pointer-events: none;
+  }
+  .results-head {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+  }
+  .results-eyebrow {
+    font-size: 11.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: rgba(255, 255, 255, 0.55);
+  }
+  .results-icon {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    background: rgba(133, 188, 50, 0.16);
+    color: var(--color-brand-400);
+  }
+  .results-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem 1.5rem;
+  }
+  @media (min-width: 640px) {
+    .results-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  .results-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+  .results-value {
+    font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.022em;
+    color: white;
+  }
+  .results-label {
+    font-size: 12.5px;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.45;
+  }
+
+  /* ============================================================
+     BILGI STATS (light variant)
+     ============================================================ */
+  .bilgi-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem 1.5rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-hairline);
+  }
+  @media (min-width: 640px) {
+    .bilgi-stats { grid-template-columns: repeat(3, 1fr); }
+  }
+  .bilgi-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+  .bilgi-stat-value {
+    font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.022em;
+    color: var(--color-ink-950);
+  }
+  .bilgi-stat-label {
+    font-size: 12.5px;
+    color: var(--color-ink-500);
+    line-height: 1.45;
+  }
+
+  /* ============================================================
+     BAR CHART (Bilgi top courses)
+     ============================================================ */
+  .bar-chart {
+    display: grid;
+    gap: 0.875rem;
+    padding: 1.75rem;
+    background: white;
+    border: 1px solid var(--color-hairline);
+    border-radius: 16px;
+  }
+  @media (min-width: 768px) {
+    .bar-chart { padding: 2rem 2.25rem; }
+  }
+  .bar-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 1rem;
+  }
+  @media (min-width: 640px) {
+    .bar-row {
+      grid-template-columns: 200px 1fr 56px;
+    }
+  }
+  .bar-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-ink-800);
+    letter-spacing: -0.005em;
+  }
+  .bar-track {
+    display: none;
+    height: 6px;
+    background: var(--color-ink-100);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  @media (min-width: 640px) {
+    .bar-track { display: block; }
+  }
+  .bar-fill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--color-brand-400), var(--color-brand-500));
+    border-radius: 999px;
+    animation: bar-fill 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation-delay: var(--bar-delay, 0ms);
+  }
+  @keyframes bar-fill {
+    from { width: 0; }
+    to { width: var(--bar-share); }
+  }
+  .bar-value {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--color-ink-700);
+    text-align: right;
+  }
+
+  /* ============================================================
+     RELATED CARDS
+     ============================================================ */
+  .related-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 640px) {
+    .related-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1024px) {
+    .related-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .related-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: white;
+    border: 1px solid var(--color-hairline);
+    border-radius: 14px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.22s ease;
+  }
+  .related-card:hover {
+    border-color: var(--color-edge);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px -8px rgba(4, 14, 30, 0.08);
+  }
+  .related-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .related-icon {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .related-icon-light { background: var(--color-brand-100); color: var(--color-brand-800); }
+  .related-icon-green { background: var(--color-brand-500); color: var(--color-ink-950); }
+  .related-icon-dark { background: var(--color-ink-950); color: var(--color-brand-400); }
+
+  .related-arrow {
+    color: var(--color-ink-300);
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+  .related-card:hover .related-arrow {
+    color: var(--color-ink-950);
+    transform: translateX(2px);
+  }
+  .related-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-ink-950);
+    letter-spacing: -0.012em;
+    line-height: 1.35;
+  }
+  .related-sub {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--color-ink-500);
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+</style>

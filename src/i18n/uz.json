@@ -1,0 +1,223 @@
+{
+  "meta": {
+    "siteName": "IT Park Capital",
+    "tagline": "O'zbekistonning raqamli kelajagini moliyalashtiramiz",
+    "description": "IT Park Capital — IT-kompaniyalar uchun maqsadli qarzlar, Zero Risk dasturi, Bilgi marketpleysi va M&A konsalting xizmatlari. O'zbekiston IT sohasini qo'llab-quvvatlovchi moliyaviy institut.",
+    "ogTitle": "IT Park Capital — IT sohasi uchun moliyaviy yechimlar",
+    "ogDescription": "IT-kompaniyalarni rivojlantirish va xalqaro bozorlarga chiqish uchun moliyalashtirish, ekspert qo'llab-quvvatlash va o'sish vositalari."
+  },
+  "nav": {
+    "programs": "Dasturlar",
+    "about": "Biz haqimizda",
+    "news": "Yangiliklar",
+    "contact": "Aloqa",
+    "apply": "Kirish",
+    "topbarStatus": "Hozir ariza qabul qilinmoqda",
+    "topbarHighlight": "Zero Risk dasturi",
+    "menuLoans": "Maqsadli qarzlar",
+    "menuProgrammes": "Davlat dasturlari",
+    "menuAdvisory": "Konsalting xizmati",
+    "menuFeaturedTitle": "Qaysi dastur sizga mos?",
+    "menuFeaturedBody": "Mutaxassisimiz biznesingizni tahlil qilib, 1 ish kunida tavsiya beradi.",
+    "menuFeaturedCta": "Bepul maslahat olish",
+    "mobileSection": "Asosiy bo'limlar",
+    "all": "Barcha dasturlar"
+  },
+  "lang": {
+    "current": "O'zbek",
+    "uz": "O'zbek",
+    "ru": "Русский",
+    "en": "English"
+  },
+  "hero": {
+    "eyebrow": "IT Park Capital",
+    "title": "O'zbekistonning raqamli kelajagini moliyalashtiramiz",
+    "subtitle": "IT-kompaniyangizni rivojlantirish va xalqaro bozorlarga chiqish uchun moliyalashtirish hamda kengayish vositalaridan foydalaning.",
+    "ctaPrimary": "Dasturlarni ko'rish",
+    "ctaSecondary": "Biz bilan bog'laning",
+    "stats": {
+      "companies": "qabul qilingan kompaniya",
+      "jobs": "yaratilgan ish o'rni",
+      "exportVolume": "yillik eksport hajmi",
+      "centers": "o'quv markazlari"
+    }
+  },
+  "programs": {
+    "sectionTag": "Bizning dasturlar",
+    "sectionTitle": "IT bizneslar uchun moliyaviy yechimlar",
+    "sectionSubtitle": "Har bir bosqichdagi IT-kompaniyalarga mos qarzlar, davlat dasturlari va konsalting xizmatlari.",
+    "viewAll": "Barchasini ko'rish",
+    "learnMore": "Batafsil ma'lumot",
+    "applyNow": "Ariza topshirish",
+    "items": {
+      "it-companies": {
+        "title": "IT-kompaniyalar va ta'lim loyihalari uchun maqsadli qarz",
+        "shortTitle": "IT va ta'lim qarzi",
+        "summary": "O'quv markazlari va IT-kompaniyalarni kengaytirish, yangi filiallar ochish va jamoa o'sishi uchun.",
+        "tagline": "Maqsadli qarz"
+      },
+      "it-export": {
+        "title": "IT-xizmatlar eksportchilari uchun maqsadli qarz",
+        "shortTitle": "Eksport qarzi",
+        "summary": "Eksport shartnomalari bo'yicha majburiyatlar, operatsion xarajatlar va pul oqimi uzilishlarini bartaraf etish.",
+        "tagline": "Eksport"
+      },
+      "corporate-education": {
+        "title": "Xodimlarni korporativ o'qitish uchun maqsadli qarz",
+        "shortTitle": "Korporativ o'qitish",
+        "summary": "IT-kompaniyalar xodimlari malakasini oshirish va yangi ish o'rinlari yaratish uchun.",
+        "tagline": "Ta'lim"
+      },
+      "zero-risk": {
+        "title": "Zero Risk dasturi",
+        "shortTitle": "Zero Risk",
+        "summary": "IT va BPO kompaniyalarni O'zbekistonga jalb qilish — ofis, jihoz va kompensatsiyalar bilan.",
+        "tagline": "Davlat dasturi"
+      },
+      "bilgi": {
+        "title": "Bilgi marketpleysi",
+        "shortTitle": "Bilgi",
+        "summary": "100+ o'quv markazlari, 520+ IT-kurs va 16-35 yoshdagi yoshlar uchun imtiyozli muddatli to'lov.",
+        "tagline": "Marketpleys"
+      },
+      "ma-advisory": {
+        "title": "M&A va moliyaviy konsalting",
+        "shortTitle": "M&A konsalting",
+        "summary": "IT-kompaniyalar uchun qo'shilish va qo'shib olish bitimlarida to'liq qo'llab-quvvatlash.",
+        "tagline": "Konsalting"
+      }
+    }
+  },
+  "results": {
+    "sectionTag": "Natijalar",
+    "sectionTitle": "Raqamlardagi ta'sirimiz",
+    "sectionSubtitle": "Real bizneslar, real natijalar — IT Park Capital ekotizimi orqali."
+  },
+  "about": {
+    "sectionTag": "Biz haqimizda",
+    "sectionTitle": "IT sohasini moliyaviy qo'llab-quvvatlash",
+    "lead": "IT Park Capital — O'zbekiston IT sohasini qo'llab-quvvatlovchi moliyaviy institut.",
+    "missionTag": "Bizning missiyamiz",
+    "missionTitle": "IT-kompaniyalar o'sishi uchun barqaror ekotizim",
+    "readMore": "To'liq tarix",
+    "establishedPill": "2021-yildan beri faoliyatda",
+    "credentials": {
+      "founded": "Tashkil etilgan",
+      "foundedValue": "2021",
+      "mandate": "Mandat",
+      "mandateValue": "VM Qarori №556",
+      "sector": "Sektor",
+      "sectorValue": "IT va BPO",
+      "status": "Maqom",
+      "statusValue": "Faol"
+    },
+    "pillarsTitle": "Qo'llab-quvvatlash yo'nalishlari",
+    "pillarsSubtitle": "Bizning faoliyatimiz uch yo'nalishda — bir ekotizim ichida.",
+    "missionSign": "— IT Park Capital",
+    "timelineTitle": "Tashkilotning rivojlanish yo'li",
+    "timelineSubtitle": "Ta'lim markazidan moliyaviy institutgacha.",
+    "missionEyebrow": "Missiyamiz",
+    "storyEyebrow": "Tarix"
+  },
+  "cta": {
+    "title": "Dasturga moslashtirilgan yechim olishga tayyormisiz?",
+    "subtitle": "Sizning kompaniyangiz holatini ko'rib chiqamiz va eng mos moliyaviy vositani tavsiya qilamiz.",
+    "primary": "Maslahat olish",
+    "secondary": "Dasturlarni ko'rish"
+  },
+  "program": {
+    "purposeTitle": "Qarz mablag'larini quyidagilarga yo'naltirish mumkin",
+    "termsTitle": "Qarz shartlari",
+    "requirementsTitle": "Qarz oluvchiga qo'yiladigan talablar",
+    "benefitsTitle": "Dastur afzalliklari",
+    "criteriaTitle": "Ishtirok etish talablari",
+    "resultsTitle": "Dastur natijalari",
+    "termsTitle2": "Shartlar",
+    "whoTitle": "Kimlar uchun mos",
+    "whatTitle": "Biz nima qilamiz",
+    "applyTitle": "Ariza topshirish",
+    "applySubtitle": "Bizning mutaxassis 1 ish kuni ichida siz bilan bog'lanadi.",
+    "backToPrograms": "Dasturlarga qaytish",
+    "relatedTitle": "Boshqa dasturlar",
+    "glanceFigures": "Asosiy ko'rsatkichlar"
+  },
+  "contact": {
+    "title": "Aloqa",
+    "heroTitle": "Loyihangiz haqida gaplashaylik",
+    "subtitle": "Bizga yozing yoki to'g'ridan-to'g'ri bog'laning. 1 ish kuni ichida javob beramiz.",
+    "responseBadge": "1 ish kuni ichida javob",
+    "methodsTitle": "Bog'lanish usullari",
+    "methodCallTitle": "Qo'ng'iroq qiling",
+    "methodCallSub": "Du–Ju, 09:00–18:00",
+    "methodEmailTitle": "Email yuboring",
+    "methodEmailSub": "Istalgan vaqtda — kun ichida javob",
+    "methodVisitTitle": "Ofisga tashrif",
+    "methodVisitSub": "Toshkent IT Park, oldindan kelishuv",
+    "expectTitle": "Keyingi qadamlar",
+    "expectSubtitle": "Aniq, oddiy va tezkor jarayon.",
+    "expect1Title": "Arizangizni qoldiring",
+    "expect1Body": "Forma yoki email orqali biznesingiz haqida qisqacha ma'lumot bering.",
+    "expect2Title": "Tahlil va tavsiya",
+    "expect2Body": "Mutaxassisimiz holatingizni o'rganib, eng mos dasturni tavsiya qiladi.",
+    "expect3Title": "Bepul maslahat qo'ng'irog'i",
+    "expect3Body": "Qulay vaqtni belgilab, batafsil shartlarni muhokama qilamiz.",
+    "formTitle": "Ariza qoldiring",
+    "formSubtitle": "Quyidagi formani to'ldiring va biz siz bilan bog'lanamiz.",
+    "name": "Ism",
+    "namePh": "Ism Familiya",
+    "email": "Email",
+    "emailPh": "siz@kompaniya.uz",
+    "phone": "Telefon",
+    "phonePh": "+998 __ ___ __ __",
+    "company": "Kompaniya",
+    "companyPh": "Kompaniya nomi",
+    "interest": "Qiziqayotgan dastur",
+    "interestPh": "Dasturni tanlang",
+    "interestNone": "Aniq dastur tanlanmagan",
+    "message": "Xabar",
+    "messagePh": "Loyihangiz haqida qisqa ma'lumot",
+    "submit": "Yuborish",
+    "submitting": "Yuborilmoqda…",
+    "success": "Rahmat! Arizangiz qabul qilindi. Tez orada siz bilan bog'lanamiz.",
+    "consent": "Yuborish orqali siz shaxsiy ma'lumotlarni qayta ishlashga rozilik bildirasiz.",
+    "infoTitle": "Bog'lanish",
+    "addressLabel": "Manzil",
+    "address": "Toshkent sh., IT Park",
+    "emailLabel": "Email",
+    "phoneLabel": "Telefon",
+    "hoursLabel": "Ish vaqti",
+    "hours": "Du–Ju, 09:00–18:00"
+  },
+  "footer": {
+    "tagline": "IT Park Capital — O'zbekiston raqamli iqtisodiyoti uchun moliyaviy yechimlar.",
+    "programsTitle": "Dasturlar",
+    "companyTitle": "Kompaniya",
+    "contactTitle": "Aloqa",
+    "rights": "Barcha huquqlar himoyalangan.",
+    "privacy": "Maxfiylik siyosati",
+    "terms": "Foydalanish shartlari",
+    "aboutLink": "Biz haqimizda",
+    "newsLink": "Yangiliklar",
+    "contactLink": "Bog'lanish"
+  },
+  "news": {
+    "heroEyebrow": "Yangiliklar",
+    "heroTitle": "IT Park Capital yangiliklari",
+    "heroSubtitle": "Dasturlarimiz, hamkorlik va IT sohasidagi muhim voqealardan xabardor bo'lib turing.",
+    "readMore": "Batafsil",
+    "empty": "Hozircha yangiliklar yo'q.",
+    "categories": {
+      "all": "Barchasi",
+      "company": "Kompaniya",
+      "programs": "Dasturlar",
+      "events": "Tadbirlar",
+      "partnerships": "Hamkorlik"
+    }
+  },
+  "common": {
+    "skipToContent": "Asosiy mazmunga o'tish",
+    "menuOpen": "Menyuni ochish",
+    "menuClose": "Menyuni yopish",
+    "scrollTop": "Yuqoriga"
+  }
+}

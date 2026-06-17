@@ -1,0 +1,361 @@
+---
+import { type Locale, getDict } from '~/i18n';
+import Base from '~/layouts/Base.astro';
+import Icon from '~/components/Icon.astro';
+import { newsOrdered, type NewsCategory } from '~/data/news';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = getDict(locale);
+const items = newsOrdered();
+
+const dateLocale = locale === 'uz' ? 'uz-UZ' : locale === 'ru' ? 'ru-RU' : 'en-GB';
+const formatDate = (iso: string) =>
+  new Date(iso).toLocaleDateString(dateLocale, {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+
+type CategoryKey = 'all' | NewsCategory;
+const allCategories: { key: CategoryKey; count: number }[] = [
+  { key: 'all', count: items.length },
+  { key: 'company', count: items.filter((n) => n.category === 'company').length },
+  { key: 'programs', count: items.filter((n) => n.category === 'programs').length },
+  { key: 'events', count: items.filter((n) => n.category === 'events').length },
+  { key: 'partnerships', count: items.filter((n) => n.category === 'partnerships').length },
+];
+const categories = allCategories.filter((c) => c.key === 'all' || c.count > 0);
+
+const newsJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: dict.news.heroTitle,
+  description: dict.news.heroSubtitle,
+  inLanguage: locale === 'uz' ? 'uz-UZ' : locale === 'ru' ? 'ru-RU' : 'en-US',
+};
+---
+
+<Base
+  title={`${dict.news.heroTitle} — IT Park Capital`}
+  description={dict.news.heroSubtitle}
+  locale={locale}
+  jsonLd={newsJsonLd}
+>
+  {/* HERO */}
+  <section class="news-hero">
+    <div class="container-page">
+      <span class="news-hero-eyebrow reveal">
+        <span class="news-hero-eyebrow-bar" aria-hidden="true"></span>
+        {dict.news.heroEyebrow}
+      </span>
+      <h1 class="news-hero-title reveal" style="transition-delay: 60ms">
+        {dict.news.heroTitle}
+      </h1>
+      <p class="news-hero-lead reveal" style="transition-delay: 140ms">
+        {dict.news.heroSubtitle}
+      </p>
+    </div>
+  </section>
+
+  {/* CATEGORIES + LIST */}
+  <section class="container-page py-12 md:py-16">
+    {items.length === 0 ? (
+      <div class="news-empty reveal">
+        <Icon name="newspaper" class="h-7 w-7 text-ink-300" />
+        <p>{dict.news.empty}</p>
+      </div>
+    ) : (
+      <>
+        <div class="news-filter reveal" role="tablist" aria-label={dict.news.categories.all}>
+          {categories.map((c, i) => (
+            <button
+              type="button"
+              class="news-filter-chip"
+              data-filter={c.key}
+              data-active={i === 0 ? 'true' : 'false'}
+              role="tab"
+            >
+              <span>{dict.news.categories[c.key]}</span>
+              <span class="news-filter-count">{c.count}</span>
+            </button>
+          ))}
+        </div>
+
+        <div class="news-grid">
+          {items.map((n, i) => (
+            <article
+              class="news-card reveal"
+              data-category={n.category}
+              style={`transition-delay: ${Math.min(i * 60, 240)}ms`}
+            >
+              <div class="news-card-meta">
+                <span class={`news-card-cat news-card-cat-${n.category}`}>
+                  {dict.news.categories[n.category]}
+                </span>
+                <span class="news-card-date">
+                  <Icon name="calendar" class="h-3.5 w-3.5" />
+                  {formatDate(n.date)}
+                </span>
+              </div>
+
+              <h3 class="news-card-title">{n.content[locale].title}</h3>
+              <p class="news-card-summary">{n.content[locale].summary}</p>
+
+              <a href="#" class="news-card-link" aria-label={`${dict.news.readMore}: ${n.content[locale].title}`}>
+                {dict.news.readMore}
+                <Icon name="arrow-right" class="h-3.5 w-3.5 news-card-arrow" />
+              </a>
+            </article>
+          ))}
+        </div>
+      </>
+    )}
+  </section>
+</Base>
+
+<style>
+  .news-hero {
+    padding-top: 3.5rem;
+    padding-bottom: 1rem;
+    background:
+      radial-gradient(ellipse 800px 400px at 90% 0%, rgba(133, 188, 50, 0.06), transparent 65%),
+      linear-gradient(180deg, var(--color-canvas) 0%, transparent 100%);
+  }
+  @media (min-width: 768px) {
+    .news-hero { padding-top: 5rem; padding-bottom: 1.5rem; }
+  }
+
+  .news-hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-brand-700);
+  }
+  .news-hero-eyebrow-bar {
+    display: inline-block;
+    width: 18px;
+    height: 1px;
+    background: var(--color-brand-500);
+  }
+
+  .news-hero-title {
+    margin-top: 1.5rem;
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    font-weight: 600;
+    letter-spacing: -0.028em;
+    line-height: 1.04;
+    color: var(--color-ink-950);
+    max-width: 22ch;
+  }
+
+  .news-hero-lead {
+    margin-top: 1.25rem;
+    font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
+    font-weight: 400;
+    letter-spacing: -0.005em;
+    line-height: 1.55;
+    color: var(--color-ink-600);
+    max-width: 60ch;
+  }
+
+  /* === Filter === */
+  .news-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .news-filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.875rem;
+    background: white;
+    border: 1px solid var(--color-hairline);
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--color-ink-600);
+    cursor: pointer;
+    transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  }
+  .news-filter-chip:hover {
+    border-color: var(--color-edge);
+    color: var(--color-ink-950);
+  }
+  .news-filter-chip[data-active='true'] {
+    background: var(--color-ink-950);
+    border-color: var(--color-ink-950);
+    color: white;
+  }
+  .news-filter-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 18px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: var(--color-canvas);
+    color: var(--color-ink-500);
+    font-size: 11.5px;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .news-filter-chip[data-active='true'] .news-filter-count {
+    background: rgba(255, 255, 255, 0.18);
+    color: white;
+  }
+
+  /* === Grid === */
+  .news-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 640px) {
+    .news-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (min-width: 1024px) {
+    .news-grid { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  }
+
+  .news-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    background: white;
+    border: 1px solid var(--color-hairline);
+    border-radius: 16px;
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  @media (min-width: 768px) {
+    .news-card { padding: 1.75rem; }
+  }
+  .news-card:hover {
+    border-color: var(--color-edge);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px -12px rgba(4, 14, 30, 0.08);
+  }
+  .news-card[hidden] { display: none; }
+
+  .news-card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .news-card-cat {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.625rem;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: var(--color-canvas);
+    color: var(--color-ink-700);
+  }
+  .news-card-cat-programs {
+    background: rgba(133, 188, 50, 0.14);
+    color: var(--color-brand-800);
+  }
+  .news-card-cat-company {
+    background: rgba(4, 14, 30, 0.06);
+    color: var(--color-ink-800);
+  }
+  .news-card-cat-events {
+    background: rgba(72, 102, 224, 0.10);
+    color: #2e3fa5;
+  }
+  .news-card-cat-partnerships {
+    background: rgba(193, 132, 12, 0.10);
+    color: #8a5a06;
+  }
+  .news-card-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 12.5px;
+    color: var(--color-ink-400);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .news-card-title {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--color-ink-950);
+    letter-spacing: -0.012em;
+    line-height: 1.32;
+  }
+  .news-card-summary {
+    margin-top: 0.625rem;
+    font-size: 14px;
+    color: var(--color-ink-500);
+    line-height: 1.55;
+    flex: 1;
+  }
+  .news-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-hairline);
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--color-ink-950);
+    text-decoration: none;
+    transition: color 0.18s ease;
+  }
+  .news-card-link:hover { color: var(--color-brand-700); }
+  .news-card-arrow { transition: transform 0.18s ease; }
+  .news-card-link:hover .news-card-arrow { transform: translateX(3px); }
+
+  /* === Empty === */
+  .news-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 4rem 1.5rem;
+    background: white;
+    border: 1px dashed var(--color-hairline);
+    border-radius: 16px;
+    color: var(--color-ink-500);
+    font-size: 15px;
+  }
+</style>
+
+<script>
+  function initNewsFilter() {
+    const chips = document.querySelectorAll<HTMLButtonElement>('.news-filter-chip');
+    const cards = document.querySelectorAll<HTMLElement>('.news-card');
+    if (!chips.length || !cards.length) return;
+
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const target = chip.dataset.filter;
+        chips.forEach((c) => c.setAttribute('data-active', c === chip ? 'true' : 'false'));
+        cards.forEach((card) => {
+          const match = target === 'all' || card.dataset.category === target;
+          card.hidden = !match;
+        });
+      });
+    });
+  }
+  initNewsFilter();
+</script>

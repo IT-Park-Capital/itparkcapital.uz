@@ -1,0 +1,541 @@
+---
+import { type Locale, getDict } from '~/i18n';
+import { programsOrdered } from '~/data/programs';
+import Base from '~/layouts/Base.astro';
+import Icon from '~/components/Icon.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = getDict(locale);
+const programs = programsOrdered();
+
+const contactJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  name: dict.contact.title,
+  description: dict.contact.subtitle,
+  inLanguage: locale === 'uz' ? 'uz-UZ' : locale === 'ru' ? 'ru-RU' : 'en-US',
+};
+---
+
+<Base
+  title={`${dict.contact.title} — IT Park Capital`}
+  description={dict.contact.subtitle}
+  locale={locale}
+  jsonLd={contactJsonLd}
+>
+  {/* HERO */}
+  <section class="contact-hero">
+    <div class="container-page">  
+      <h1 class="contact-hero-title reveal" style="transition-delay: 60ms">
+        {dict.contact.heroTitle}
+      </h1>
+
+      <p class="contact-hero-lead reveal" style="transition-delay: 140ms">
+        {dict.contact.subtitle}
+      </p>
+    </div>
+  </section>
+
+  {/* FORM + WHAT HAPPENS NEXT */}
+  <section class="container-page py-12 md:py-16">
+    <div class="grid gap-10 lg:gap-14 lg:grid-cols-12">
+      {/* Form */}
+      <div class="lg:col-span-7 reveal">
+        <form id="contact-form" class="form-card" novalidate>
+          <header class="form-header">
+            <span class="form-eyebrow">
+              <span class="form-eyebrow-bar" aria-hidden="true"></span>
+              {dict.contact.formTitle}
+            </span>
+            <h2 class="form-title">{dict.contact.heroTitle}</h2>
+            <p class="form-subtitle">{dict.contact.formSubtitle}</p>
+          </header>
+
+          <div class="form-grid">
+            <label class="field">
+              <span class="field-label">{dict.contact.name}<span class="field-req">*</span></span>
+              <input type="text" name="name" required minlength="2" placeholder={dict.contact.namePh} />
+            </label>
+            <label class="field">
+              <span class="field-label">{dict.contact.email}<span class="field-req">*</span></span>
+              <input type="email" name="email" required placeholder={dict.contact.emailPh} />
+            </label>
+            <label class="field">
+              <span class="field-label">{dict.contact.phone}</span>
+              <input type="tel" name="phone" placeholder={dict.contact.phonePh} pattern="[+0-9 \-()]{6,}" />
+            </label>
+            <label class="field">
+              <span class="field-label">{dict.contact.company}</span>
+              <input type="text" name="company" placeholder={dict.contact.companyPh} />
+            </label>
+            <label class="field field-wide">
+              <span class="field-label">{dict.contact.interest}</span>
+              <div class="select-wrap">
+                <select name="program">
+                  <option value="">{dict.contact.interestNone}</option>
+                  {programs.map((p) => (
+                    <option value={p.slug}>{p.content[locale].shortTitle}</option>
+                  ))}
+                </select>
+                <Icon name="chevron-down" class="h-4 w-4 select-chevron" />
+              </div>
+            </label>
+            <label class="field field-wide">
+              <span class="field-label">{dict.contact.message}</span>
+              <textarea name="message" rows="4" placeholder={dict.contact.messagePh}></textarea>
+            </label>
+          </div>
+
+          <div class="form-footer">
+            <p class="form-consent">{dict.contact.consent}</p>
+            <button type="submit" class="form-submit">
+              <span class="submit-text">{dict.contact.submit}</span>
+              <span class="submit-loading hidden">{dict.contact.submitting}</span>
+              <Icon name="arrow-right" class="h-4 w-4 submit-arrow" />
+            </button>
+          </div>
+        </form>
+      </div>
+
+      {/* Contact info — prominent */}
+      <aside class="lg:col-span-5 reveal" style="transition-delay: 80ms">
+        <div class="info-card">
+          <span class="info-eyebrow">
+            <span class="info-eyebrow-bar" aria-hidden="true"></span>
+            {dict.contact.infoTitle}
+          </span>
+
+          <a href="tel:+998712030303" class="info-row info-row-link">
+            <span class="info-icon"><Icon name="phone" class="h-5 w-5" /></span>
+            <span class="info-body">
+              <span class="info-label">{dict.contact.phoneLabel}</span>
+              <span class="info-value tabular-nums">+998 71 203 03 03</span>
+            </span>
+          </a>
+
+          <a href="mailto:info@itparkcapital.uz" class="info-row info-row-link">
+            <span class="info-icon"><Icon name="mail" class="h-5 w-5" /></span>
+            <span class="info-body">
+              <span class="info-label">{dict.contact.emailLabel}</span>
+              <span class="info-value">info@itparkcapital.uz</span>
+            </span>
+          </a>
+
+          <div class="info-row">
+            <span class="info-icon"><Icon name="pin" class="h-5 w-5" /></span>
+            <span class="info-body">
+              <span class="info-label">{dict.contact.addressLabel}</span>
+              <span class="info-value">{dict.contact.address}</span>
+            </span>
+          </div>
+
+          <div class="info-row info-row-last">
+            <span class="info-icon"><Icon name="clock" class="h-5 w-5" /></span>
+            <span class="info-body">
+              <span class="info-label">{dict.contact.hoursLabel}</span>
+              <span class="info-value">{dict.contact.hours}</span>
+            </span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ============ HERO ============ */
+  .contact-hero {
+    padding-top: 3.5rem;
+    padding-bottom: 1rem;
+    background:
+      radial-gradient(ellipse 800px 400px at 90% 0%, rgba(133, 188, 50, 0.06), transparent 65%),
+      linear-gradient(180deg, var(--color-canvas) 0%, transparent 100%);
+  }
+  @media (min-width: 768px) {
+    .contact-hero { padding-top: 5rem; padding-bottom: 1.5rem; }
+  }
+
+  .contact-hero-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem 0.375rem 0.625rem;
+    border-radius: 999px;
+    background: white;
+    border: 1px solid var(--color-hairline);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-ink-700);
+    letter-spacing: 0.005em;
+    box-shadow: 0 1px 2px rgba(4, 14, 30, 0.03);
+  }
+  .contact-hero-pill-dot {
+    position: relative;
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--color-brand-500);
+  }
+  .contact-hero-pill-dot::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 999px;
+    background: var(--color-brand-500);
+    opacity: 0.35;
+    animation: pill-pulse 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  @keyframes pill-pulse {
+    0%, 100% { transform: scale(0.8); opacity: 0.4; }
+    50% { transform: scale(1.6); opacity: 0; }
+  }
+
+  .contact-hero-title {
+    margin-top: 1.75rem;
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    font-weight: 600;
+    letter-spacing: -0.028em;
+    line-height: 1.04;
+    color: var(--color-ink-950);
+    max-width: 18ch;
+  }
+
+  .contact-hero-lead {
+    margin-top: 1.5rem;
+    font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
+    font-weight: 400;
+    letter-spacing: -0.005em;
+    line-height: 1.55;
+    color: var(--color-ink-600);
+    max-width: 56ch;
+  }
+
+  /* ============ FORM ============ */
+  .form-card {
+    background: white;
+    border: 1px solid var(--color-hairline);
+    border-radius: 18px;
+    padding: 2rem 1.75rem;
+  }
+  @media (min-width: 768px) {
+    .form-card { padding: 2.5rem; }
+  }
+
+  .form-header {
+    padding-bottom: 1.75rem;
+    margin-bottom: 1.75rem;
+    border-bottom: 1px solid var(--color-hairline);
+  }
+  .form-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-brand-700);
+  }
+  .form-eyebrow-bar {
+    display: inline-block;
+    width: 18px;
+    height: 1px;
+    background: var(--color-brand-500);
+  }
+  .form-title {
+    margin-top: 0.875rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.018em;
+    line-height: 1.2;
+    color: var(--color-ink-950);
+  }
+  .form-subtitle {
+    margin-top: 0.5rem;
+    font-size: 14px;
+    color: var(--color-ink-500);
+    line-height: 1.5;
+  }
+
+  .form-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 640px) {
+    .form-grid { grid-template-columns: 1fr 1fr; }
+    .field-wide { grid-column: 1 / -1; }
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .field-label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--color-ink-700);
+    letter-spacing: -0.005em;
+  }
+  .field-req {
+    margin-left: 4px;
+    color: var(--color-brand-700);
+  }
+  .field input,
+  .field textarea,
+  .field select {
+    width: 100%;
+    padding: 0.75rem 0.875rem;
+    background: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    border-radius: 9px;
+    font-family: inherit;
+    font-size: 14.5px;
+    color: var(--color-ink-950);
+    transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+    min-height: 44px;
+  }
+  .field textarea {
+    resize: vertical;
+    min-height: 110px;
+    line-height: 1.5;
+  }
+  .field input::placeholder,
+  .field textarea::placeholder {
+    color: var(--color-ink-400);
+  }
+  .field input:hover,
+  .field textarea:hover,
+  .field select:hover {
+    border-color: var(--color-edge);
+  }
+  .field input:focus,
+  .field textarea:focus,
+  .field select:focus {
+    outline: none;
+    border-color: var(--color-brand-500);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(133, 188, 50, 0.12);
+  }
+  .field input:invalid:not(:placeholder-shown) {
+    border-color: #d34d4d;
+  }
+  .select-wrap { position: relative; }
+  .select-wrap select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 2.5rem;
+    cursor: pointer;
+  }
+  .select-chevron {
+    position: absolute;
+    right: 0.875rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-ink-400);
+    pointer-events: none;
+  }
+
+  .form-footer {
+    margin-top: 1.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-hairline);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  @media (min-width: 640px) {
+    .form-footer {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+  .form-consent {
+    font-size: 12.5px;
+    color: var(--color-ink-400);
+    line-height: 1.5;
+    max-width: 36ch;
+  }
+
+  .form-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0 1.25rem;
+    height: 44px;
+    border-radius: 9px;
+    background: var(--color-ink-950);
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    border: 0;
+    cursor: pointer;
+    transition: background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+    white-space: nowrap;
+  }
+  .form-submit:hover {
+    background: #0c1a2e;
+    box-shadow: 0 6px 20px rgba(4, 14, 30, 0.18);
+  }
+  .form-submit:active { transform: scale(0.98); }
+  .submit-arrow { transition: transform 0.18s ease; }
+  .form-submit:hover .submit-arrow { transform: translateX(2px); }
+  @media (max-width: 639px) {
+    .form-submit { width: 100%; }
+  }
+
+  .success-message {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    margin-top: 1.25rem;
+    padding: 0.875rem 1rem;
+    border-radius: 10px;
+    background: var(--color-brand-100);
+    border: 1px solid rgba(133, 188, 50, 0.32);
+    color: var(--color-brand-800);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* ============ INFO CARD (sidebar) ============ */
+  .info-card {
+    background: white;
+    border: 1px solid var(--color-hairline);
+    border-radius: 18px;
+    padding: 1.5rem;
+    position: sticky;
+    top: 6rem;
+    display: flex;
+    flex-direction: column;
+  }
+  @media (min-width: 768px) {
+    .info-card { padding: 1.75rem; }
+  }
+
+  .info-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-brand-700);
+    padding-bottom: 1.25rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-hairline);
+  }
+  .info-eyebrow-bar {
+    display: inline-block;
+    width: 18px;
+    height: 1px;
+    background: var(--color-brand-500);
+  }
+
+  .info-row {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 0.875rem;
+    align-items: center;
+    padding: 0.875rem 0.5rem;
+    margin: 0 -0.5rem;
+    border-radius: 10px;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.18s ease;
+  }
+  .info-row + .info-row {
+    border-top: 1px solid var(--color-hairline);
+  }
+  .info-row-link:hover {
+    background: var(--color-canvas);
+  }
+
+  .info-icon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--color-brand-100);
+    color: var(--color-brand-800);
+    transition: background 0.18s ease, color 0.18s ease;
+  }
+  .info-row-link:hover .info-icon {
+    background: var(--color-brand-500);
+    color: var(--color-ink-950);
+  }
+
+  .info-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+  .info-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-ink-400);
+  }
+  .info-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-ink-950);
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+</style>
+
+<script>
+  function initContactForm() {
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    if (!form || (form as any).__bound) return;
+    (form as any).__bound = true;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      const submitBtn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+      const submitText = form.querySelector<HTMLElement>('.submit-text');
+      const submitLoading = form.querySelector<HTMLElement>('.submit-loading');
+      const submitArrow = form.querySelector<HTMLElement>('.submit-arrow');
+      const success = form.querySelector<HTMLElement>('.success-message');
+
+      submitBtn?.setAttribute('disabled', 'true');
+      submitText?.classList.add('hidden');
+      submitLoading?.classList.remove('hidden');
+      submitArrow?.classList.add('hidden');
+
+      try {
+        const data = Object.fromEntries(new FormData(form).entries());
+        await new Promise((r) => setTimeout(r, 700));
+        console.info('[contact] payload', data);
+
+        success?.classList.remove('hidden');
+        form.reset();
+      } catch (err) {
+        console.error(err);
+      } finally {
+        submitBtn?.removeAttribute('disabled');
+        submitText?.classList.remove('hidden');
+        submitLoading?.classList.add('hidden');
+        submitArrow?.classList.remove('hidden');
+      }
+    });
+  }
+  initContactForm();
+</script>

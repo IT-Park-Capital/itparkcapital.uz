@@ -1,0 +1,624 @@
+---
+import { localePath, type Locale } from '~/i18n';
+import { programsOrdered } from '~/data/programs';
+import Icon from '~/components/Icon.astro';
+import Logo from '~/components/Logo.astro';
+import LanguageSwitcher from '~/components/LanguageSwitcher.astro';
+
+interface Props {
+  locale: Locale;
+  pathname: string;
+  dict: any;
+}
+
+const { locale, pathname, dict } = Astro.props;
+const programs = programsOrdered();
+
+const isActive = (target: string) => {
+  const cur = pathname.replace(/\/$/, '') || '/';
+  const t = target.replace(/\/$/, '') || '/';
+  if (t === '/' || t === `/${locale}`) return cur === '/' || cur === `/${locale}`;
+  return cur.startsWith(t);
+};
+
+const programsActive = pathname.includes('/programs/');
+---
+
+<a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:bg-ink-950 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg">
+  {dict.common.skipToContent}
+</a>
+
+<header class="site-header sticky top-0 z-40">
+  <div class="container-page header-row">
+    <a href={localePath(locale)} class="brand-link" aria-label="IT Park Capital">
+      <Logo height={34} />
+    </a>
+
+    <nav class="primary-nav" aria-label="Primary">
+      <div class="programs-trigger" data-programs>
+        <button
+          type="button"
+          class="nav-link nav-link-button"
+          aria-haspopup="true"
+          aria-expanded="false"
+          data-active={programsActive ? 'true' : 'false'}
+        >
+          <span>{dict.nav.programs}</span>
+          <Icon name="chevron-down" class="h-3 w-3 nav-chevron" />
+        </button>
+
+        <div class="programs-menu" aria-hidden="true">
+          <div class="programs-menu-inner">
+            {programs.map((p) => (
+              <a href={localePath(locale, `programs/${p.slug}`)} class="programs-item">
+                <span class="programs-item-icon">
+                  <Icon name={p.icon} class="h-4 w-4" strokeWidth={1.7} />
+                </span>
+                <span class="programs-item-body">
+                  <span class="programs-item-title">{p.content[locale].shortTitle}</span>
+                  <span class="programs-item-sub">{p.content[locale].summary}</span>
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <a href={localePath(locale, 'about')} class="nav-link" data-active={isActive(localePath(locale, 'about')) ? 'true' : 'false'}>
+        <span>{dict.nav.about}</span>
+      </a>
+      <a href={localePath(locale, 'news')} class="nav-link" data-active={isActive(localePath(locale, 'news')) ? 'true' : 'false'}>
+        <span>{dict.nav.news}</span>
+      </a>
+      <a href={localePath(locale, 'contact')} class="nav-link" data-active={isActive(localePath(locale, 'contact')) ? 'true' : 'false'}>
+        <span>{dict.nav.contact}</span>
+      </a>
+    </nav>
+
+    <div class="cta-cluster">
+      <LanguageSwitcher locale={locale} pathname={pathname} dict={dict} />
+      <a href="https://my.itparkcapital.uz" target="_blank" rel="noopener noreferrer" class="apply-btn hidden sm:inline-flex">
+        <span>{dict.nav.apply}</span>
+        <Icon name="arrow-right" class="h-3.5 w-3.5 apply-arrow" />
+      </a>
+
+      <button
+        type="button"
+        class="mobile-toggle lg:hidden"
+        aria-label={dict.common.menuOpen}
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <span class="hamburger" aria-hidden="true">
+          <span></span>
+          <span></span>
+        </span>
+      </button>
+    </div>
+  </div>
+</header>
+
+{/* Mobile menu — OUTSIDE header so position:fixed works (header has backdrop-filter) */}
+<div id="mobile-menu" class="mobile-menu lg:hidden" aria-hidden="true">
+  <div class="container-page py-7">
+    <span class="mobile-eyebrow">{dict.nav.programs}</span>
+    <div class="mobile-items">
+      {programs.map((p) => (
+        <a href={localePath(locale, `programs/${p.slug}`)} class="mobile-item">
+          <span class="mobile-item-icon"><Icon name={p.icon} class="h-5 w-5" strokeWidth={1.7} /></span>
+          <span class="mobile-item-body">
+            <span class="mobile-item-title">{p.content[locale].shortTitle}</span>
+            <span class="mobile-item-sub">{p.content[locale].summary}</span>
+          </span>
+          <Icon name="arrow-right" class="h-4 w-4 mobile-item-arrow" />
+        </a>
+      ))}
+    </div>
+
+    <div class="mobile-divider"></div>
+
+    <div class="mobile-links">
+      <a href={localePath(locale, 'about')} class="mobile-link">
+        {dict.nav.about}
+        <Icon name="arrow-right" class="h-4 w-4 mobile-item-arrow" />
+      </a>
+      <a href={localePath(locale, 'news')} class="mobile-link">
+        {dict.nav.news}
+        <Icon name="arrow-right" class="h-4 w-4 mobile-item-arrow" />
+      </a>
+      <a href={localePath(locale, 'contact')} class="mobile-link">
+        {dict.nav.contact}
+        <Icon name="arrow-right" class="h-4 w-4 mobile-item-arrow" />
+      </a>
+    </div>
+
+    <a href="https://my.itparkcapital.uz" target="_blank" rel="noopener noreferrer" class="apply-btn apply-btn-mobile sm:hidden">
+      {dict.nav.apply}
+      <Icon name="arrow-right" class="h-4 w-4" />
+    </a>
+  </div>
+</div>
+
+<style>
+  .site-header {
+    background: rgba(255, 255, 255, 0.82);
+    -webkit-backdrop-filter: saturate(140%) blur(12px);
+    backdrop-filter: saturate(140%) blur(12px);
+    border-bottom: 1px solid transparent;
+    transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .site-header.is-scrolled {
+    background: rgba(255, 255, 255, 0.94);
+    border-bottom-color: var(--color-hairline);
+    box-shadow: 0 1px 0 rgba(4, 14, 30, 0.02), 0 6px 20px rgba(4, 14, 30, 0.04);
+  }
+
+  .header-row {
+    display: flex;
+    align-items: center;
+    height: 72px;
+    gap: 1rem;
+    transition: height 0.25s ease;
+  }
+  .site-header.is-scrolled .header-row { height: 64px; }
+  @media (max-width: 1023px) {
+    .header-row { height: 64px; }
+  }
+
+  .brand-link {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    transition: opacity 0.18s ease;
+  }
+  .brand-link:hover { opacity: 0.78; }
+
+  /* === Primary nav === */
+  .primary-nav {
+    display: none;
+    align-items: center;
+    margin-left: 2rem;
+    gap: 0.125rem;
+  }
+  @media (min-width: 1024px) {
+    .primary-nav { display: flex; }
+  }
+
+  .nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    height: 36px;
+    padding: 0 0.875rem;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    color: var(--color-ink-600);
+    text-decoration: none;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: color 0.18s ease, background 0.18s ease;
+    font-family: inherit;
+    line-height: 1;
+  }
+  .nav-link:hover {
+    color: var(--color-ink-950);
+    background: var(--color-canvas);
+  }
+
+  /* Subtle dot under active link */
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -6px;
+    transform: translateX(-50%) scale(0);
+    width: 4px;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--color-brand-500);
+    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .nav-link[data-active='true'] {
+    color: var(--color-ink-950);
+    font-weight: 600;
+  }
+  .nav-link[data-active='true']::after {
+    transform: translateX(-50%) scale(1);
+  }
+  .nav-link[aria-expanded='true'] {
+    color: var(--color-ink-950);
+    background: var(--color-canvas);
+  }
+
+  .nav-chevron {
+    opacity: 0.55;
+    transition: transform 0.22s ease, opacity 0.18s ease;
+  }
+  .nav-link:hover .nav-chevron { opacity: 0.9; }
+  .nav-link[aria-expanded='true'] .nav-chevron {
+    transform: rotate(180deg);
+    opacity: 0.9;
+  }
+
+  /* === Programs dropdown === */
+  .programs-trigger {
+    position: relative;
+  }
+  .programs-menu {
+    position: absolute;
+    left: 0;
+    top: calc(100% + 10px);
+    width: 560px;
+    max-width: calc(100vw - 2rem);
+    padding: 0;
+    background: white;
+    border: 1px solid var(--color-hairline);
+    border-radius: 16px;
+    box-shadow: 0 16px 40px -12px rgba(4, 14, 30, 0.12), 0 6px 12px rgba(4, 14, 30, 0.04);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-6px);
+    transition: opacity 0.2s ease, transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: 50;
+  }
+  .programs-menu.is-open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+  .programs-menu-inner {
+    padding: 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+
+  .programs-item {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    align-items: start;
+    gap: 0.75rem;
+    padding: 0.75rem 0.875rem;
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--color-ink-950);
+    transition: background 0.18s ease;
+  }
+  .programs-item:hover {
+    background: var(--color-canvas);
+  }
+  .programs-item-icon {
+    grid-row: 1 / span 2;
+    grid-column: 1;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--color-brand-100);
+    color: var(--color-brand-800);
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .programs-item:hover .programs-item-icon {
+    background: var(--color-brand-500);
+    color: var(--color-ink-950);
+  }
+  .programs-item-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+  .programs-item-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-ink-950);
+    letter-spacing: -0.005em;
+    line-height: 1.3;
+  }
+  .programs-item-sub {
+    font-size: 12.5px;
+    color: var(--color-ink-500);
+    line-height: 1.4;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  /* === CTA cluster === */
+  .cta-cluster {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+  }
+
+  .apply-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 1.125rem 0 1.25rem;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--color-ink-950);
+    color: white;
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    text-decoration: none;
+    transition: background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .apply-btn:hover {
+    background: #0c1a2e;
+    box-shadow: 0 6px 20px rgba(4, 14, 30, 0.18);
+  }
+  .apply-btn:active { transform: scale(0.98); }
+  .apply-arrow {
+    transition: transform 0.2s ease;
+  }
+  .apply-btn:hover .apply-arrow { transform: translateX(2px); }
+
+  .apply-btn-mobile {
+    width: 100%;
+    height: 48px;
+    justify-content: center;
+    margin-top: 1.5rem;
+    font-size: 15px;
+  }
+
+  /* Hide main-bar Apply on small screens; mobile-menu has its own */
+  @media (max-width: 639px) {
+    .header-row .apply-btn:not(.apply-btn-mobile) { display: none; }
+  }
+  @media (min-width: 640px) {
+    .mobile-menu .apply-btn-mobile { display: none; }
+  }
+
+  /* === Mobile toggle === */
+  .mobile-toggle {
+    display: grid;
+    place-items: center;
+    height: 40px;
+    width: 40px;
+    border-radius: 8px;
+    background: transparent;
+    border: 1px solid var(--color-hairline);
+    cursor: pointer;
+    transition: border-color 0.18s ease, background 0.18s ease;
+  }
+  @media (min-width: 1024px) {
+    .mobile-toggle { display: none; }
+    .mobile-menu { display: none !important; }
+  }
+  .mobile-toggle:hover {
+    border-color: var(--color-edge);
+    background: var(--color-canvas);
+  }
+  .mobile-toggle[aria-expanded='true'] {
+    border-color: var(--color-ink-950);
+    background: var(--color-ink-950);
+  }
+
+  .hamburger {
+    position: relative;
+    display: inline-block;
+    width: 18px;
+    height: 12px;
+  }
+  .hamburger span {
+    position: absolute;
+    left: 0;
+    width: 18px;
+    height: 1.6px;
+    background: var(--color-ink-800);
+    border-radius: 2px;
+    transition: transform 0.25s ease, top 0.25s ease, background 0.25s ease, width 0.2s ease;
+  }
+  .hamburger span:nth-child(1) { top: 2px; }
+  .hamburger span:nth-child(2) { top: 8px; width: 13px; }
+  .mobile-toggle[aria-expanded='true'] .hamburger span {
+    background: white;
+    width: 18px;
+  }
+  .mobile-toggle[aria-expanded='true'] .hamburger span:nth-child(1) {
+    top: 5px;
+    transform: rotate(45deg);
+  }
+  .mobile-toggle[aria-expanded='true'] .hamburger span:nth-child(2) {
+    top: 5px;
+    transform: rotate(-45deg);
+  }
+
+  /* === Mobile menu === */
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    z-index: 38;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    padding-top: 64px;
+  }
+  .mobile-menu.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .mobile-eyebrow {
+    display: inline-block;
+    padding-left: 0.875rem;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink-400);
+    margin-bottom: 0.625rem;
+  }
+
+  .mobile-items {
+    display: grid;
+    gap: 0.125rem;
+  }
+
+  .mobile-item {
+    display: grid;
+    grid-template-columns: 40px 1fr 16px;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0.875rem;
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--color-ink-950);
+    transition: background 0.18s ease;
+  }
+  .mobile-item:active { background: var(--color-canvas); }
+
+  .mobile-item-icon {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
+    background: var(--color-brand-100);
+    color: var(--color-brand-800);
+  }
+  .mobile-item-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+  .mobile-item-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-ink-950);
+    line-height: 1.3;
+  }
+  .mobile-item-sub {
+    font-size: 12.5px;
+    color: var(--color-ink-500);
+    line-height: 1.4;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+  .mobile-item-arrow { color: var(--color-ink-300); }
+
+  .mobile-divider {
+    height: 1px;
+    background: var(--color-hairline);
+    margin: 1.25rem 0 1rem;
+  }
+
+  .mobile-links {
+    display: grid;
+    gap: 0.125rem;
+  }
+  .mobile-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.875rem;
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--color-ink-800);
+    font-size: 15.5px;
+    font-weight: 500;
+    transition: background 0.18s ease;
+  }
+  .mobile-link:active { background: var(--color-canvas); }
+</style>
+
+<script>
+  function initHeader() {
+    const header = document.querySelector<HTMLElement>('.site-header');
+    if (!header || (header as any).__bound) return;
+    (header as any).__bound = true;
+
+    /* Scroll state */
+    const onScroll = () => {
+      if (window.scrollY > 8) header.classList.add('is-scrolled');
+      else header.classList.remove('is-scrolled');
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    /* Programs dropdown */
+    const wrap = header.querySelector<HTMLElement>('[data-programs]');
+    const trigger = wrap?.querySelector<HTMLButtonElement>('button');
+    const menu = wrap?.querySelector<HTMLElement>('.programs-menu');
+
+    if (wrap && trigger && menu) {
+      let openTimer: any, closeTimer: any;
+      const open = () => {
+        clearTimeout(closeTimer);
+        menu.classList.add('is-open');
+        menu.setAttribute('aria-hidden', 'false');
+        trigger.setAttribute('aria-expanded', 'true');
+      };
+      const close = () => {
+        menu.classList.remove('is-open');
+        menu.setAttribute('aria-hidden', 'true');
+        trigger.setAttribute('aria-expanded', 'false');
+      };
+
+      wrap.addEventListener('mouseenter', () => {
+        clearTimeout(closeTimer);
+        openTimer = setTimeout(open, 80);
+      });
+      wrap.addEventListener('mouseleave', () => {
+        clearTimeout(openTimer);
+        closeTimer = setTimeout(close, 160);
+      });
+      trigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+        isOpen ? close() : open();
+      });
+      document.addEventListener('click', (e) => {
+        if (!wrap.contains(e.target as Node)) close();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') close();
+      });
+      menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', close));
+    }
+
+    /* Mobile menu */
+    const toggle = header.querySelector<HTMLButtonElement>('.mobile-toggle');
+    const mobile = document.getElementById('mobile-menu');
+    let mobileOpen = false;
+    const setMobile = (open: boolean) => {
+      mobileOpen = open;
+      if (!mobile || !toggle) return;
+      if (open) {
+        mobile.classList.add('is-open');
+        mobile.setAttribute('aria-hidden', 'false');
+        toggle.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      } else {
+        mobile.classList.remove('is-open');
+        mobile.setAttribute('aria-hidden', 'true');
+        toggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+    };
+    toggle?.addEventListener('click', () => setMobile(!mobileOpen));
+    mobile?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMobile(false)));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setMobile(false); });
+    window.addEventListener('resize', () => { if (window.innerWidth >= 1024) setMobile(false); });
+  }
+  initHeader();
+</script>

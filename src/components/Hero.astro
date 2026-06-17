@@ -1,0 +1,132 @@
+---
+import { localePath, type Locale } from '~/i18n';
+import Icon from '~/components/Icon.astro';
+
+interface Props {
+  locale: Locale;
+  dict: any;
+}
+
+const { locale, dict } = Astro.props;
+
+const stats = [
+  { value: '66', label: dict.hero.stats.companies },
+  { value: '1 500+', label: dict.hero.stats.jobs },
+  { value: '$29M+', label: dict.hero.stats.exportVolume },
+  { value: '105', label: dict.hero.stats.centers },
+];
+---
+
+<section class="hero relative overflow-hidden">
+  <div class="hero-bg-glow absolute inset-0 pointer-events-none" aria-hidden="true"></div>
+
+  <div class="container-page relative pt-12 md:pt-20 lg:pt-24 pb-16 md:pb-24">
+    <div class="grid gap-10 lg:gap-16 lg:grid-cols-12 items-center">
+      <div class="lg:col-span-7 reveal">
+        <span class="section-tag">{dict.hero.eyebrow}</span>
+        <h1 class="mt-5 text-[2.25rem] sm:text-[2.75rem] md:text-[3.5rem] lg:text-[4rem] font-semibold tracking-[-0.03em] leading-[1.04] text-ink-950 max-w-[14ch] sm:max-w-[16ch]">
+          {dict.hero.title}
+        </h1>
+        <p class="mt-6 max-w-xl text-[1.0625rem] md:text-[1.125rem] leading-[1.6] text-ink-500">
+          {dict.hero.subtitle}
+        </p>
+        <div class="mt-9 flex flex-wrap gap-3">
+          <a href={localePath(locale, 'programs/zero-risk')} class="btn btn-primary">
+            {dict.hero.ctaPrimary}
+            <Icon name="arrow-right" class="h-4 w-4" />
+          </a>
+          <a href={localePath(locale, 'contact')} class="btn btn-outline">
+            {dict.hero.ctaSecondary}
+          </a>
+        </div>
+      </div>
+
+      <div class="lg:col-span-5 reveal" style="transition-delay: 120ms">
+        <div class="grid grid-cols-2 gap-3 sm:gap-4">
+          <div class="hero-card hero-card-green col-span-2 sm:col-span-1">
+            <div class="hero-pattern" aria-hidden="true"></div>
+            <div class="relative">
+              <span class="text-[11.5px] font-semibold uppercase tracking-[0.14em] text-ink-950/70">Zero Risk</span>
+              <p class="mt-2 text-[28px] font-semibold tracking-[-0.02em] text-ink-950 leading-tight">$29M+</p>
+              <p class="text-[13px] text-ink-950/70 mt-1">{dict.hero.stats.exportVolume}</p>
+            </div>
+          </div>
+          <div class="hero-card hero-card-white col-span-1">
+            <span class="text-[11.5px] font-semibold uppercase tracking-[0.14em] text-ink-400">Bilgi</span>
+            <p class="mt-2 text-[28px] font-semibold tracking-[-0.02em] text-ink-950 leading-tight">520</p>
+            <p class="text-[13px] text-ink-500 mt-1">{locale === 'uz' ? "IT-kurslar" : locale === 'ru' ? "IT-курсов" : "IT courses"}</p>
+          </div>
+          <div class="hero-card hero-card-white col-span-1">
+            <span class="text-[11.5px] font-semibold uppercase tracking-[0.14em] text-ink-400">Jobs</span>
+            <p class="mt-2 text-[28px] font-semibold tracking-[-0.02em] text-ink-950 leading-tight">1 500+</p>
+            <p class="text-[13px] text-ink-500 mt-1">{dict.hero.stats.jobs}</p>
+          </div>
+          <div class="hero-card hero-card-dark col-span-2 sm:col-span-1">
+            <div class="flex items-center gap-2">
+              <span class="grid place-items-center h-8 w-8 rounded-md bg-brand-500/15 text-brand-400">
+                <Icon name="spark" class="h-4 w-4" />
+              </span>
+              <span class="text-[11.5px] font-semibold uppercase tracking-[0.14em] text-white/60">M&amp;A</span>
+            </div>
+            <p class="mt-3 text-[15.5px] font-medium text-white/95 leading-snug">
+              {locale === 'uz' ? "Bitimni dastlabki baholashdan yopilishigacha" : locale === 'ru' ? "Сделка от первичной оценки до закрытия" : "Deal from valuation to close"}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-14 md:mt-20 grid grid-cols-2 md:grid-cols-4 gap-y-8 gap-x-6 reveal" style="transition-delay: 220ms">
+      {stats.map((s) => (
+        <div class="flex flex-col gap-1 md:border-l md:border-hairline md:pl-6 first:border-l-0 first:pl-0">
+          <span class="text-[28px] md:text-[34px] font-semibold tracking-[-0.02em] text-ink-950 leading-none" data-counter={s.value}>
+            {s.value}
+          </span>
+          <span class="text-[13px] text-ink-500 mt-2">{s.label}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-bg-glow {
+    background:
+      radial-gradient(ellipse 800px 400px at 80% 0%, rgba(133, 188, 50, 0.10), transparent 70%),
+      radial-gradient(ellipse 600px 300px at 0% 30%, rgba(133, 188, 50, 0.04), transparent 70%);
+  }
+  .hero-card {
+    position: relative;
+    border-radius: 16px;
+    padding: 1.5rem;
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+    min-height: 130px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .hero-card:hover { transform: translateY(-3px); }
+  .hero-card-green {
+    background: linear-gradient(135deg, #a7d96f 0%, #85bc32 100%);
+    box-shadow: 0 8px 28px rgba(133, 188, 50, 0.24);
+  }
+  .hero-card-green:hover { box-shadow: 0 12px 36px rgba(133, 188, 50, 0.32); }
+  .hero-card-white { background: #fff; border: 1px solid var(--color-hairline); }
+  .hero-card-white:hover { border-color: var(--color-edge); box-shadow: 0 8px 24px rgba(4, 14, 30, 0.06); }
+  .hero-card-dark {
+    background: linear-gradient(135deg, #131a28 0%, #040e1e 100%);
+    color: white;
+  }
+  .hero-pattern {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle at 1px 1px, rgba(4, 14, 30, 0.12) 1px, transparent 0);
+    background-size: 14px 14px;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  @media (min-width: 768px) {
+    .hero-card { min-height: 160px; padding: 1.75rem; }
+  }
+</style>

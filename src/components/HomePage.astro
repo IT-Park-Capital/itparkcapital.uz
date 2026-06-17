@@ -1,0 +1,37 @@
+---
+import { type Locale, getDict } from '~/i18n';
+import Base from '~/layouts/Base.astro';
+import Hero from '~/components/Hero.astro';
+import ProgramsGrid from '~/components/ProgramsGrid.astro';
+import ResultsSection from '~/components/ResultsSection.astro';
+import AboutTeaser from '~/components/AboutTeaser.astro';
+import CtaBanner from '~/components/CtaBanner.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = getDict(locale);
+
+const title = `${dict.meta.siteName} — ${dict.meta.tagline}`;
+
+const homeJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': 'https://itparkcapital.uz/#website',
+  url: 'https://itparkcapital.uz',
+  name: dict.meta.siteName,
+  description: dict.meta.description,
+  publisher: { '@id': 'https://itparkcapital.uz/#organization' },
+  inLanguage: locale === 'uz' ? 'uz-UZ' : locale === 'ru' ? 'ru-RU' : 'en-US',
+};
+---
+
+<Base title={title} description={dict.meta.description} locale={locale} jsonLd={homeJsonLd}>
+  <Hero locale={locale} dict={dict} />
+  <ProgramsGrid locale={locale} dict={dict} />
+  <ResultsSection locale={locale} dict={dict} />
+  <AboutTeaser locale={locale} dict={dict} />
+  <CtaBanner locale={locale} dict={dict} />
+</Base>

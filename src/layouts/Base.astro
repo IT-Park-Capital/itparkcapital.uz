@@ -1,0 +1,155 @@
+---
+import '@fontsource-variable/inter';
+import '~/styles/global.css';
+import Seo from '~/components/Seo.astro';
+import Header from '~/components/Header.astro';
+import Footer from '~/components/Footer.astro';
+import { type Locale, getDict, HREFLANG_MAP } from '~/i18n';
+
+interface Props {
+  title: string;
+  description: string;
+  locale: Locale;
+  pathname?: string;
+  ogImage?: string;
+  type?: 'website' | 'article';
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  hideFooter?: boolean;
+}
+
+const {
+  title,
+  description,
+  locale,
+  pathname = Astro.url.pathname,
+  ogImage,
+  type,
+  jsonLd,
+  hideFooter = false,
+} = Astro.props;
+
+const dict = getDict(locale);
+const htmlLang = HREFLANG_MAP[locale];
+
+const baseOrganization = {
+  '@context': 'https://schema.org',
+  '@type': 'FinancialService',
+  '@id': 'https://itparkcapital.uz/#organization',
+  name: 'IT Park Capital',
+  alternateName: 'ITPC',
+  url: 'https://itparkcapital.uz',
+  logo: 'https://itparkcapital.uz/logo.png',
+  description: dict.meta.description,
+  email: 'info@itparkcapital.uz',
+  telephone: '+998-71-203-03-03',
+  areaServed: { '@type': 'Country', name: 'Uzbekistan' },
+  address: {
+    '@type': 'PostalAddress',
+    addressCountry: 'UZ',
+    addressLocality: 'Tashkent',
+    addressRegion: 'Tashkent',
+  },
+  sameAs: [],
+};
+
+const finalJsonLd = jsonLd
+  ? Array.isArray(jsonLd)
+    ? [baseOrganization, ...jsonLd]
+    : [baseOrganization, jsonLd]
+  : baseOrganization;
+---
+
+<!doctype html>
+<html lang={htmlLang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <Seo
+      title={title}
+      description={description}
+      locale={locale}
+      pathname={pathname}
+      ogImage={ogImage}
+      type={type}
+      jsonLd={finalJsonLd}
+    />
+  </head>
+  <body class="antialiased">
+    <Header locale={locale} pathname={pathname} dict={dict} />
+    <main id="main">
+      <slot />
+    </main>
+    {!hideFooter && <Footer locale={locale} dict={dict} />}
+
+    <script>
+      // Reveal-on-scroll using IntersectionObserver
+      function initReveal() {
+        const targets = document.querySelectorAll('.reveal');
+        if (!targets.length || !('IntersectionObserver' in window)) {
+          targets.forEach((t) => t.classList.add('is-visible'));
+          return;
+        }
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                (e.target as HTMLElement).classList.add('is-visible');
+                io.unobserve(e.target);
+              }
+            });
+          },
+          { rootMargin: '0px 0px -40px 0px', threshold: 0.05 }
+        );
+        targets.forEach((t) => io.observe(t));
+      }
+      initReveal();
+
+      // Counter animation
+      function initCounters() {
+        const counters = document.querySelectorAll<HTMLElement>('[data-counter]');
+        if (!counters.length || !('IntersectionObserver' in window)) {
+          counters.forEach((c) => { c.textContent = c.dataset.counter || c.textContent; });
+          return;
+        }
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const el = entry.target as HTMLElement;
+            io.unobserve(el);
+            const finalText = el.dataset.counter || '';
+            const numericMatch = finalText.match(/[\d\s]+([.,]\d+)?/);
+            if (!numericMatch) { el.textContent = finalText; return; }
+            const numericPart = numericMatch[0].replace(/\s/g, '').replace(',', '.');
+            const target = parseFloat(numericPart);
+            if (isNaN(target)) { el.textContent = finalText; return; }
+            const start = performance.now();
+            const duration = 1100;
+            const isInteger = !numericPart.includes('.');
+            const prefix = finalText.slice(0, numericMatch.index || 0);
+            const suffix = finalText.slice((numericMatch.index || 0) + numericMatch[0].length);
+            const fmt = (v: number) => {
+              if (isInteger) {
+                return Math.round(v).toLocaleString('en-US').replace(/,/g, ' ');
+              }
+              return v.toFixed(1);
+            };
+            const tick = (now: number) => {
+              const t = Math.min(1, (now - start) / duration);
+              const eased = 1 - Math.pow(1 - t, 3);
+              el.textContent = prefix + fmt(target * eased) + suffix;
+              if (t < 1) requestAnimationFrame(tick);
+              else el.textContent = finalText;
+            };
+            requestAnimationFrame(tick);
+          });
+        }, { threshold: 0.4 });
+        counters.forEach((c) => io.observe(c));
+      }
+      initCounters();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,68 @@
+---
+import { alternates, HREFLANG_MAP, type Locale, defaultLocale } from '~/i18n';
+
+interface Props {
+  title: string;
+  description: string;
+  locale: Locale;
+  pathname: string;
+  ogImage?: string;
+  type?: 'website' | 'article';
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title,
+  description,
+  locale,
+  pathname,
+  ogImage = '/og-image.svg',
+  type = 'website',
+  jsonLd,
+} = Astro.props;
+
+const SITE = 'https://itparkcapital.uz';
+const canonical = `${SITE}${pathname.replace(/\/$/, '') || '/'}`;
+const altMap = alternates(pathname);
+const ogImageUrl = ogImage.startsWith('http') ? ogImage : `${SITE}${ogImage}`;
+const xDefaultUrl = `${SITE}${altMap[defaultLocale]}`;
+
+const jsonLdArray = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="theme-color" content="#85bc32" />
+<meta name="color-scheme" content="light" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="generator" content={Astro.generator} />
+
+<link rel="canonical" href={canonical} />
+{(['uz', 'ru', 'en'] as Locale[]).map((l) => (
+  <link rel="alternate" hreflang={HREFLANG_MAP[l]} href={`${SITE}${altMap[l]}`} />
+))}
+<link rel="alternate" hreflang="x-default" href={xDefaultUrl} />
+
+<meta property="og:type" content={type} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:site_name" content="IT Park Capital" />
+<meta property="og:locale" content={HREFLANG_MAP[locale].replace('-', '_')} />
+{(['uz', 'ru', 'en'] as Locale[]).filter((l) => l !== locale).map((l) => (
+  <meta property="og:locale:alternate" content={HREFLANG_MAP[l].replace('-', '_')} />
+))}
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageUrl} />
+
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+
+{jsonLdArray.map((data) => (
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(data)} />
+))}
