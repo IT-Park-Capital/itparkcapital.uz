@@ -10,9 +10,9 @@ interface Props {
 const { locale, dict } = Astro.props;
 
 const stats = [
-  { value: '66', label: dict.hero.stats.companies },
-  { value: '1 500+', label: dict.hero.stats.jobs },
-  { value: '$29M+', label: dict.hero.stats.exportVolume },
+  { value: '74', label: dict.hero.stats.companies },
+  { value: '2 500+', label: dict.hero.stats.jobs },
+  { value: '$42M+', label: dict.hero.stats.exportVolume },
   { value: '105', label: dict.hero.stats.centers },
 ];
 ---
@@ -47,18 +47,18 @@ const stats = [
             <div class="hero-pattern" aria-hidden="true"></div>
             <div class="relative">
               <span class="text-[11.5px] font-semibold uppercase tracking-[0.14em] text-ink-950/70">Zero Risk</span>
-              <p class="mt-2 text-[28px] font-semibold tracking-[-0.02em] text-ink-950 leading-tight">$29M+</p>
+              <p class="mt-2 text-[28px] font-semibold tracking-[-0.02em] text-ink-950 leading-tight" data-counter="$42M+">$42M+</p>
               <p class="text-[13px] text-ink-950/70 mt-1">{dict.hero.stats.exportVolume}</p>
             </div>
           </div>
           <div class="hero-card hero-card-white col-span-1">
             <span class="text-[11.5px] font-semibold uppercase tracking-[0.14em] text-ink-400">Bilgi</span>
-            <p class="mt-2 text-[28px] font-semibold tracking-[-0.02em] text-ink-950 leading-tight">520</p>
+            <p class="mt-2 text-[28px] font-semibold tracking-[-0.02em] text-ink-950 leading-tight" data-counter="520">520</p>
             <p class="text-[13px] text-ink-500 mt-1">{locale === 'uz' ? "IT-kurslar" : locale === 'ru' ? "IT-курсов" : "IT courses"}</p>
           </div>
           <div class="hero-card hero-card-white col-span-1">
             <span class="text-[11.5px] font-semibold uppercase tracking-[0.14em] text-ink-400">Jobs</span>
-            <p class="mt-2 text-[28px] font-semibold tracking-[-0.02em] text-ink-950 leading-tight">1 500+</p>
+            <p class="mt-2 text-[28px] font-semibold tracking-[-0.02em] text-ink-950 leading-tight" data-counter="2 500+">2 500+</p>
             <p class="text-[13px] text-ink-500 mt-1">{dict.hero.stats.jobs}</p>
           </div>
           <div class="hero-card hero-card-dark col-span-2 sm:col-span-1">

@@ -326,7 +326,7 @@ export const PROGRAMS: ProgramData[] = [
     content: {
       uz: {
         kind: 'zero-risk',
-        title: "Zero Risk dasturi",
+        title: "Incentives (Zero Risk) dasturi",
         shortTitle: "Zero Risk",
         summary: "IT va BPO kompaniyalarni O'zbekistonga jalb qilish — ofis, jihoz va kompensatsiyalar bilan.",
         intro: "Incentives (Zero Risk) — IT va BPO kompaniyalarni O'zbekistonga jalb qilishga qaratilgan davlat dasturi bo'lib, IT-kompaniyalarga start bosqichida moliyaviy xatarlarni minimallashtirgan holda o'sish va kengayish imkonini beradi. Dastur jamoa, infratuzilma va rivojlanishga yo'naltirilgan investitsiyalardagi asosiy yuklamalarni kamaytiradi. Dasturning asosiy maqsadi — IT va BPO kompaniyalarga O'zbekiston bozoriga kirish va minimal xatarlar bilan kengayish imkoniyatini yaratish.",
@@ -353,7 +353,7 @@ export const PROGRAMS: ProgramData[] = [
       },
       ru: {
         kind: 'zero-risk',
-        title: "Программа Zero Risk",
+        title: "Программа Incentives (Zero Risk)",
         shortTitle: "Zero Risk",
         summary: "Привлечение IT и BPO компаний в Узбекистан — офис, оборудование и компенсации.",
         intro: "Incentives (Zero Risk) — государственная программа привлечения IT и BPO компаний в Узбекистан, позволяет IT-компаниям расти и масштабироваться с минимизацией финансовых рисков на старте, снижая ключевые нагрузки при инвестициях в команду, инфраструктуру и развитие. Главная цель программы — обеспечить IT и BPO компаниям возможность войти на рынок Узбекистана и масштабироваться с минимальными рисками.",
@@ -380,7 +380,7 @@ export const PROGRAMS: ProgramData[] = [
       },
       en: {
         kind: 'zero-risk',
-        title: "Zero Risk Programme",
+        title: "Incentives (Zero Risk) Programme",
         shortTitle: "Zero Risk",
         summary: "Attracting IT and BPO companies to Uzbekistan — with offices, equipment, and subsidies.",
         intro: "Incentives (Zero Risk) — is a government programme designed to attract IT and BPO companies to Uzbekistan. It enables IT companies to grow and scale up whilst minimising financial risks at the outset, reducing the key burdens associated with investing in staff, infrastructure and development. The main objective of the programme is to provide IT and BPO companies with the opportunity to enter the Uzbek market and scale up with minimal risk.",
