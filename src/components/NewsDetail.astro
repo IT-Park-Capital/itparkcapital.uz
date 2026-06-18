@@ -47,49 +47,54 @@ const labels = {
   </section>
 </Base>
 
-<style>
-  .news-detail { padding-top: 2.5rem; padding-bottom: 4rem; }
-  @media (min-width: 768px) { .news-detail { padding-top: 3.5rem; } }
+{/*
+  Global (is:global) but namespaced under #news-detail-root — the article body,
+  quote and carousel are created in the client <script>, so Astro's scoped styles
+  would not reach them.
+*/}
+<style is:global>
+  #news-detail-root { padding-top: 2.5rem; padding-bottom: 4rem; }
+  @media (min-width: 768px) { #news-detail-root { padding-top: 3.5rem; } }
 
-  .news-detail-back {
+  #news-detail-root .news-detail-back {
     display: inline-flex; align-items: center; gap: 0.4rem;
     font-size: 13.5px; font-weight: 600; color: var(--color-ink-500);
     text-decoration: none; transition: color 0.18s ease; margin-bottom: 2rem;
   }
-  .news-detail-back:hover { color: var(--color-ink-950); }
+  #news-detail-root .news-detail-back:hover { color: var(--color-ink-950); }
 
-  .news-detail-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
-  .news-detail-cat {
+  #news-detail-root .news-detail-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+  #news-detail-root .news-detail-cat {
     display: inline-flex; align-items: center; padding: 0.25rem 0.625rem; border-radius: 999px;
     font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
     background: var(--color-canvas); color: var(--color-ink-700);
   }
-  .news-detail-date {
+  #news-detail-root .news-detail-date {
     display: inline-flex; align-items: center; gap: 0.375rem;
     font-size: 13px; color: var(--color-ink-400); font-variant-numeric: tabular-nums;
   }
 
-  .news-detail-title {
-    font-size: clamp(1.875rem, 4vw, 2.75rem); font-weight: 600; letter-spacing: -0.025em;
+  #news-detail-root .news-detail-title {
+    font-size: clamp(1.875rem, 4vw, 2.75rem); font-weight: 700; letter-spacing: -0.025em;
     line-height: 1.1; color: var(--color-ink-950);
   }
-  .news-detail-subtitle {
+  #news-detail-root .news-detail-subtitle {
     margin-top: 1rem; font-size: clamp(1.0625rem, 1.6vw, 1.25rem); line-height: 1.55;
     color: var(--color-ink-600);
   }
 
-  .news-detail-hero-img {
-    width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 16px;
+  #news-detail-root .news-detail-hero-img {
+    width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 18px;
     background: var(--color-canvas); margin-top: 2rem;
   }
 
-  .news-detail-body { margin-top: 2rem; }
-  .news-detail-body p {
+  #news-detail-root .news-detail-body { margin-top: 2rem; }
+  #news-detail-root .news-detail-body p {
     font-size: 1.0625rem; line-height: 1.75; color: var(--color-ink-700); margin-bottom: 1.25rem;
   }
 
   /* === Quote === */
-  .news-quote {
+  #news-detail-root .news-quote {
     position: relative; margin: 2.5rem 0; padding: 1.75rem 1.75rem 1.75rem 2.5rem;
     border-left: 4px solid var(--color-brand-500);
     background: linear-gradient(180deg, rgba(133, 188, 50, 0.07), rgba(133, 188, 50, 0.02));
@@ -97,42 +102,42 @@ const labels = {
     font-size: clamp(1.125rem, 2vw, 1.4rem); font-weight: 500; font-style: italic;
     line-height: 1.5; color: var(--color-ink-900);
   }
-  .news-quote::before {
+  #news-detail-root .news-quote::before {
     content: '\201C'; position: absolute; top: -0.5rem; left: 0.75rem;
     font-size: 3rem; line-height: 1; color: var(--color-brand-400); font-family: Georgia, serif;
   }
 
   /* === Carousel === */
-  .news-carousel { margin-top: 2.5rem; }
-  .news-carousel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
-  .news-carousel-nav { display: flex; gap: 0.5rem; }
-  .news-carousel-btn {
+  #news-detail-root .news-carousel { margin-top: 2.5rem; }
+  #news-detail-root .news-carousel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+  #news-detail-root .news-carousel-nav { display: flex; gap: 0.5rem; }
+  #news-detail-root .news-carousel-btn {
     display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px;
     border-radius: 999px; border: 1px solid var(--color-hairline); background: white;
     color: var(--color-ink-700); cursor: pointer; transition: border-color 0.18s ease, color 0.18s ease;
   }
-  .news-carousel-btn:hover { border-color: var(--color-edge); color: var(--color-ink-950); }
-  .news-carousel-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-  .news-carousel-track {
+  #news-detail-root .news-carousel-btn:hover { border-color: var(--color-edge); color: var(--color-ink-950); }
+  #news-detail-root .news-carousel-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  #news-detail-root .news-carousel-track {
     display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory;
     scroll-behavior: smooth; -webkit-overflow-scrolling: touch; padding-bottom: 0.5rem;
     scrollbar-width: thin;
   }
-  .news-carousel-slide {
+  #news-detail-root .news-carousel-slide {
     flex: 0 0 86%; scroll-snap-align: center; border-radius: 14px; overflow: hidden;
     background: var(--color-canvas);
   }
-  @media (min-width: 768px) { .news-carousel-slide { flex-basis: 60%; } }
-  .news-carousel-slide img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
+  @media (min-width: 768px) { #news-detail-root .news-carousel-slide { flex-basis: 60%; } }
+  #news-detail-root .news-carousel-slide img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
 
-  .news-loading { display: flex; justify-content: center; padding: 3rem 0; }
-  .news-spinner {
+  #news-detail-root .news-loading { display: flex; justify-content: center; padding: 3rem 0; }
+  #news-detail-root .news-spinner {
     width: 28px; height: 28px; border-radius: 50%;
     border: 3px solid var(--color-hairline); border-top-color: var(--color-brand-500);
     animation: news-spin 0.7s linear infinite;
   }
   @keyframes news-spin { to { transform: rotate(360deg); } }
-  .news-empty {
+  #news-detail-root .news-empty {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     gap: 0.75rem; padding: 4rem 1.5rem; background: white; border: 1px dashed var(--color-hairline);
     border-radius: 16px; color: var(--color-ink-500); font-size: 15px;

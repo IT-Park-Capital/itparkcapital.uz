@@ -34,48 +34,55 @@ const newsJsonLd = {
   locale={locale}
   jsonLd={newsJsonLd}
 >
-  {/* HERO */}
-  <section class="news-hero">
-    <div class="container-page">
-      <span class="news-hero-eyebrow reveal">
-        <span class="news-hero-eyebrow-bar" aria-hidden="true"></span>
-        {dict.news.heroEyebrow}
-      </span>
-      <h1 class="news-hero-title reveal" style="transition-delay: 60ms">
-        {dict.news.heroTitle}
-      </h1>
-      <p class="news-hero-lead reveal" style="transition-delay: 140ms">
-        {dict.news.heroSubtitle}
-      </p>
-    </div>
-  </section>
+  <div class="news-page">
+    {/* HERO */}
+    <section class="news-hero">
+      <div class="container-page">
+        <span class="news-hero-eyebrow reveal">
+          <span class="news-hero-eyebrow-bar" aria-hidden="true"></span>
+          {dict.news.heroEyebrow}
+        </span>
+        <h1 class="news-hero-title reveal" style="transition-delay: 60ms">
+          {dict.news.heroTitle}
+        </h1>
+        <p class="news-hero-lead reveal" style="transition-delay: 140ms">
+          {dict.news.heroSubtitle}
+        </p>
+      </div>
+    </section>
 
-  {/* CATEGORIES + LIST (rendered client-side from the CMS API) */}
-  <section
-    id="news-root"
-    class="container-page py-12 md:py-16"
-    data-locale={locale}
-    data-date-locale={dateLocale}
-    data-detail-base={detailBase}
-    data-labels={JSON.stringify(labels)}
-  >
-    <div id="news-filter" class="news-filter" role="tablist" aria-label={dict.news.categories.all} hidden></div>
+    {/* CATEGORIES + LIST (rendered client-side from the CMS API) */}
+    <section
+      id="news-root"
+      class="container-page py-12 md:py-16"
+      data-locale={locale}
+      data-date-locale={dateLocale}
+      data-detail-base={detailBase}
+      data-labels={JSON.stringify(labels)}
+    >
+      <div id="news-filter" class="news-filter" role="tablist" aria-label={dict.news.categories.all} hidden></div>
 
-    <div id="news-loading" class="news-loading">
-      <span class="news-spinner" aria-hidden="true"></span>
-    </div>
+      <div id="news-loading" class="news-loading">
+        <span class="news-spinner" aria-hidden="true"></span>
+      </div>
 
-    <div id="news-grid" class="news-grid"></div>
+      <div id="news-grid" class="news-grid"></div>
 
-    <div id="news-empty" class="news-empty" hidden>
-      <Icon name="newspaper" class="h-7 w-7 text-ink-300" />
-      <p>{dict.news.empty}</p>
-    </div>
-  </section>
+      <div id="news-empty" class="news-empty" hidden>
+        <Icon name="newspaper" class="h-7 w-7 text-ink-300" />
+        <p>{dict.news.empty}</p>
+      </div>
+    </section>
+  </div>
 </Base>
 
-<style>
-  .news-hero {
+{/*
+  Styles are global (is:global) but namespaced under .news-page, because the cards
+  and filter chips are created in the client <script> below — Astro's default scoped
+  styles only attach to server-rendered elements and would not reach them.
+*/}
+<style is:global>
+  .news-page .news-hero {
     padding-top: 3.5rem;
     padding-bottom: 1rem;
     background:
@@ -83,125 +90,110 @@ const newsJsonLd = {
       linear-gradient(180deg, var(--color-canvas) 0%, transparent 100%);
   }
   @media (min-width: 768px) {
-    .news-hero { padding-top: 5rem; padding-bottom: 1.5rem; }
+    .news-page .news-hero { padding-top: 5rem; padding-bottom: 1.5rem; }
   }
 
-  .news-hero-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.625rem;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
+  .news-page .news-hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.625rem;
+    font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em;
     color: var(--color-brand-700);
   }
-  .news-hero-eyebrow-bar { display: inline-block; width: 18px; height: 1px; background: var(--color-brand-500); }
+  .news-page .news-hero-eyebrow-bar { display: inline-block; width: 18px; height: 1px; background: var(--color-brand-500); }
 
-  .news-hero-title {
+  .news-page .news-hero-title {
     margin-top: 1.5rem;
     font-size: clamp(2.25rem, 5vw, 3.75rem);
-    font-weight: 600;
-    letter-spacing: -0.028em;
-    line-height: 1.04;
-    color: var(--color-ink-950);
-    max-width: 22ch;
+    font-weight: 600; letter-spacing: -0.028em; line-height: 1.04;
+    color: var(--color-ink-950); max-width: 22ch;
   }
-  .news-hero-lead {
+  .news-page .news-hero-lead {
     margin-top: 1.25rem;
     font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
-    line-height: 1.55;
-    color: var(--color-ink-600);
-    max-width: 60ch;
+    line-height: 1.55; color: var(--color-ink-600); max-width: 60ch;
   }
 
   /* === Filter === */
-  .news-filter { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
-  .news-filter-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0.875rem;
-    background: white;
-    border: 1px solid var(--color-hairline);
-    border-radius: 999px;
-    font-family: inherit;
-    font-size: 13.5px;
-    font-weight: 500;
-    color: var(--color-ink-600);
-    cursor: pointer;
-    transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  .news-page .news-filter { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+  .news-page .news-filter-chip {
+    display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.875rem;
+    background: white; border: 1px solid var(--color-hairline); border-radius: 999px;
+    font-family: inherit; font-size: 13.5px; font-weight: 500; color: var(--color-ink-600);
+    cursor: pointer; transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
   }
-  .news-filter-chip:hover { border-color: var(--color-edge); color: var(--color-ink-950); }
-  .news-filter-chip[data-active='true'] { background: var(--color-ink-950); border-color: var(--color-ink-950); color: white; }
-  .news-filter-count {
+  .news-page .news-filter-chip:hover { border-color: var(--color-edge); color: var(--color-ink-950); }
+  .news-page .news-filter-chip[data-active='true'] { background: var(--color-ink-950); border-color: var(--color-ink-950); color: white; }
+  .news-page .news-filter-count {
     display: inline-flex; align-items: center; justify-content: center;
     min-width: 20px; height: 18px; padding: 0 6px; border-radius: 999px;
     background: var(--color-canvas); color: var(--color-ink-500);
     font-size: 11.5px; font-weight: 600; line-height: 1;
   }
-  .news-filter-chip[data-active='true'] .news-filter-count { background: rgba(255, 255, 255, 0.18); color: white; }
+  .news-page .news-filter-chip[data-active='true'] .news-filter-count { background: rgba(255, 255, 255, 0.18); color: white; }
 
   /* === Grid === */
-  .news-grid { display: grid; gap: 1.25rem; grid-template-columns: 1fr; }
-  @media (min-width: 640px) { .news-grid { grid-template-columns: 1fr 1fr; } }
-  @media (min-width: 1024px) { .news-grid { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } }
+  .news-page .news-grid { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .news-page .news-grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1024px) { .news-page .news-grid { grid-template-columns: repeat(3, 1fr); gap: 1.75rem; } }
 
-  .news-card {
-    display: flex;
-    flex-direction: column;
-    background: white;
-    border: 1px solid var(--color-hairline);
-    border-radius: 16px;
-    overflow: hidden;
+  /* === Card === */
+  .news-page .news-card {
+    display: flex; flex-direction: column; background: white;
+    border: 1px solid var(--color-hairline); border-radius: 18px; overflow: hidden;
+    box-shadow: 0 1px 3px rgba(4, 14, 30, 0.04), 0 12px 28px -20px rgba(4, 14, 30, 0.12);
     transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   }
-  .news-card:hover { border-color: var(--color-edge); transform: translateY(-2px); box-shadow: 0 10px 30px -12px rgba(4, 14, 30, 0.08); }
-  .news-card[hidden] { display: none; }
+  .news-page .news-card:hover {
+    border-color: var(--color-edge); transform: translateY(-3px);
+    box-shadow: 0 1px 3px rgba(4, 14, 30, 0.05), 0 20px 40px -22px rgba(4, 14, 30, 0.18);
+  }
+  .news-page .news-card[hidden] { display: none; }
 
-  .news-card-imagelink { display: block; }
-  .news-card-image {
+  /* Uniform main photo — same 16:9 box for every card, cropped to fill. */
+  .news-page .news-card-imagelink { display: block; }
+  .news-page .news-card-image {
     display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover;
-    background: var(--color-canvas);
+    border-top-left-radius: 18px; border-top-right-radius: 18px; background: var(--color-canvas);
   }
 
-  .news-card-body { display: flex; flex-direction: column; flex: 1; padding: 1.5rem; }
-  @media (min-width: 768px) { .news-card-body { padding: 1.75rem; } }
+  .news-page .news-card-body { display: flex; flex-direction: column; flex: 1; padding: 1.5rem; }
+  @media (min-width: 768px) { .news-page .news-card-body { padding: 1.75rem; } }
 
-  .news-card-meta { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 1.1rem; }
-  .news-card-cat {
+  .news-page .news-card-meta { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 1.1rem; }
+  .news-page .news-card-cat {
     display: inline-flex; align-items: center; padding: 0.25rem 0.625rem; border-radius: 999px;
     font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
     background: var(--color-canvas); color: var(--color-ink-700); white-space: nowrap;
   }
-  .news-card-date {
+  .news-page .news-card-date {
     display: inline-flex; align-items: center; gap: 0.4rem;
-    font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
-    color: var(--color-ink-400); font-variant-numeric: tabular-nums;
+    font-size: 12.5px; font-weight: 500; color: var(--color-ink-400);
+    font-variant-numeric: tabular-nums; white-space: nowrap;
   }
 
-  .news-card-title { font-size: 1.25rem; font-weight: 700; color: var(--color-ink-950); letter-spacing: -0.015em; line-height: 1.3; }
-  @media (min-width: 768px) { .news-card-title { font-size: 1.3125rem; } }
-  .news-card-summary { margin-top: 0.8rem; font-size: 14.5px; color: var(--color-ink-500); line-height: 1.6; flex: 1; }
-  .news-card-link {
+  .news-page .news-card-title {
+    font-size: 1.25rem; font-weight: 700; color: var(--color-ink-950);
+    letter-spacing: -0.015em; line-height: 1.3;
+  }
+  @media (min-width: 768px) { .news-page .news-card-title { font-size: 1.3125rem; } }
+  .news-page .news-card-summary { margin-top: 0.8rem; font-size: 14.5px; color: var(--color-ink-500); line-height: 1.6; flex: 1; }
+  .news-page .news-card-link {
     display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 1.5rem; padding-top: 1.1rem;
     border-top: 1px solid var(--color-hairline); font-size: 13.5px; font-weight: 600;
     color: var(--color-ink-950); text-decoration: none; transition: color 0.18s ease;
   }
-  .news-card-link:hover { color: var(--color-brand-700); }
-  .news-card-arrow { transition: transform 0.18s ease; }
-  .news-card-link:hover .news-card-arrow { transform: translateX(3px); }
+  .news-page .news-card-link:hover { color: var(--color-brand-700); }
+  .news-page .news-card-arrow { transition: transform 0.18s ease; }
+  .news-page .news-card-link:hover .news-card-arrow { transform: translateX(3px); }
 
   /* === Loading / Empty === */
-  .news-loading { display: flex; justify-content: center; padding: 3rem 0; }
-  .news-spinner {
+  .news-page .news-loading { display: flex; justify-content: center; padding: 3rem 0; }
+  .news-page .news-spinner {
     width: 28px; height: 28px; border-radius: 50%;
     border: 3px solid var(--color-hairline); border-top-color: var(--color-brand-500);
     animation: news-spin 0.7s linear infinite;
   }
   @keyframes news-spin { to { transform: rotate(360deg); } }
-
-  .news-empty {
+  .news-page .news-empty {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     gap: 0.75rem; padding: 4rem 1.5rem; background: white; border: 1px dashed var(--color-hairline);
     border-radius: 16px; color: var(--color-ink-500); font-size: 15px;
@@ -261,6 +253,8 @@ const newsJsonLd = {
         img.src = item.mainImageUrl;
         img.alt = item.title;
         img.loading = 'lazy';
+        // Drop the image gracefully if it fails to load → clean text-only card.
+        img.addEventListener('error', () => a.remove());
         a.appendChild(img);
         article.appendChild(a);
       }
@@ -271,19 +265,21 @@ const newsJsonLd = {
       const meta = document.createElement('div');
       meta.className = 'news-card-meta';
 
-      const date = document.createElement('span');
-      date.className = 'news-card-date';
-      date.innerHTML = CAL_SVG;
-      date.appendChild(document.createTextNode(' ' + formatDate(item.publishedAt)));
-      meta.appendChild(date);
-
       if (item.categoryName) {
         const cat = document.createElement('span');
         cat.className = 'news-card-cat';
         cat.textContent = item.categoryName;
         applyCatColor(cat, item.categoryColor);
         meta.appendChild(cat);
+      } else {
+        meta.appendChild(document.createElement('span'));
       }
+
+      const date = document.createElement('span');
+      date.className = 'news-card-date';
+      date.innerHTML = CAL_SVG;
+      date.appendChild(document.createTextNode(' ' + formatDate(item.publishedAt)));
+      meta.appendChild(date);
       body.appendChild(meta);
 
       const title = document.createElement('h3');
