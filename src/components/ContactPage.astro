@@ -98,6 +98,14 @@ const contactJsonLd = {
               <Icon name="arrow-right" class="h-4 w-4 submit-arrow" />
             </button>
           </div>
+
+          <div class="form-message form-message-success" id="form-success" role="status">
+            <Icon name="check" class="h-5 w-5 shrink-0" />
+            <span>{dict.contact.success}</span>
+          </div>
+          <div class="form-message form-message-error" id="form-error" role="alert">
+            <span>{dict.contact.error}</span>
+          </div>
         </form>
       </div>
 
@@ -392,18 +400,26 @@ const contactJsonLd = {
     .form-submit { width: 100%; }
   }
 
-  .success-message {
-    display: flex;
+  .form-message {
+    display: none;
     gap: 0.75rem;
     align-items: flex-start;
     margin-top: 1.25rem;
     padding: 0.875rem 1rem;
     border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .form-message.show { display: flex; }
+  .form-message-success {
     background: var(--color-brand-100);
     border: 1px solid rgba(133, 188, 50, 0.32);
     color: var(--color-brand-800);
-    font-size: 14px;
-    line-height: 1.5;
+  }
+  .form-message-error {
+    background: #fdecec;
+    border: 1px solid rgba(211, 77, 77, 0.32);
+    color: #a3271f;
   }
 
   /* ============ INFO CARD (sidebar) ============ */
@@ -498,10 +514,15 @@ const contactJsonLd = {
 </style>
 
 <script>
+  import { submitContact } from '~/lib/contact.api';
+
   function initContactForm() {
     const form = document.getElementById('contact-form') as HTMLFormElement | null;
     if (!form || (form as any).__bound) return;
     (form as any).__bound = true;
+
+    const success = document.getElementById('form-success');
+    const errorEl = document.getElementById('form-error');
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -513,22 +534,28 @@ const contactJsonLd = {
       const submitText = form.querySelector<HTMLElement>('.submit-text');
       const submitLoading = form.querySelector<HTMLElement>('.submit-loading');
       const submitArrow = form.querySelector<HTMLElement>('.submit-arrow');
-      const success = form.querySelector<HTMLElement>('.success-message');
 
+      success?.classList.remove('show');
+      errorEl?.classList.remove('show');
       submitBtn?.setAttribute('disabled', 'true');
       submitText?.classList.add('hidden');
       submitLoading?.classList.remove('hidden');
       submitArrow?.classList.add('hidden');
 
       try {
-        const data = Object.fromEntries(new FormData(form).entries());
-        await new Promise((r) => setTimeout(r, 700));
-        console.info('[contact] payload', data);
-
-        success?.classList.remove('hidden');
+        const fd = new FormData(form);
+        await submitContact({
+          name: String(fd.get('name') || ''),
+          email: String(fd.get('email') || ''),
+          phone: String(fd.get('phone') || '') || undefined,
+          company: String(fd.get('company') || '') || undefined,
+          programSlug: String(fd.get('program') || '') || undefined,
+          message: String(fd.get('message') || '') || undefined,
+        });
+        success?.classList.add('show');
         form.reset();
       } catch (err) {
-        console.error(err);
+        errorEl?.classList.add('show');
       } finally {
         submitBtn?.removeAttribute('disabled');
         submitText?.classList.remove('hidden');

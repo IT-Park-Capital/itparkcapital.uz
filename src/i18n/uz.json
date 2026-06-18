@@ -179,6 +179,7 @@
     "submit": "Yuborish",
     "submitting": "Yuborilmoqda…",
     "success": "Rahmat! Arizangiz qabul qilindi. Tez orada siz bilan bog'lanamiz.",
+    "error": "Xatolik yuz berdi. Iltimos, qaytadan urinib ko'ring.",
     "consent": "Yuborish orqali siz shaxsiy ma'lumotlarni qayta ishlashga rozilik bildirasiz.",
     "infoTitle": "Bog'lanish",
     "addressLabel": "Manzil",

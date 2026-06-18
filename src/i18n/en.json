@@ -179,6 +179,7 @@
     "submit": "Send",
     "submitting": "Sending…",
     "success": "Thank you! Your request has been received. We'll be in touch soon.",
+    "error": "Something went wrong. Please try again.",
     "consent": "By submitting, you consent to the processing of your personal data.",
     "infoTitle": "Get in touch",
     "addressLabel": "Address",
