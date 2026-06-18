@@ -33,8 +33,8 @@
     "eyebrow": "IT Park Capital",
     "title": "Financing the digital future of Uzbekistan",
     "subtitle": "Access financing and scaling tools to grow your IT company and expand into international markets.",
-    "ctaPrimary": "View programmes",
-    "ctaSecondary": "Get in touch",
+    "ctaPrimary": "Submit application",
+    "ctaSecondary": "View programmes",
     "stats": {
       "companies": "companies accepted",
       "jobs": "jobs created",
@@ -143,7 +143,7 @@
   },
   "contact": {
     "title": "Contact",
-    "heroTitle": "Let's talk about your project",
+    "heroTitle": "Tell us about your company — we will find the right tool for you",
     "subtitle": "Write to us or get in touch directly. We reply within 1 business day.",
     "responseBadge": "Reply within 1 business day",
     "methodsTitle": "Get in touch",
