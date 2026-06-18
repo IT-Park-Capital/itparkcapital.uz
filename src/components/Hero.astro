@@ -10,14 +10,14 @@ interface Props {
 const { locale, dict } = Astro.props;
 
 const stats = [
-  { value: '74', label: dict.hero.stats.companies },
-  { value: '2 500+', label: dict.hero.stats.jobs },
-  { value: '$42M+', label: dict.hero.stats.exportVolume },
-  { value: '105', label: dict.hero.stats.centers },
+  { key: 'companies', value: '74', label: dict.hero.stats.companies },
+  { key: 'jobs', value: '2 500+', label: dict.hero.stats.jobs },
+  { key: 'export_volume', value: '$42M+', label: dict.hero.stats.exportVolume },
+  { key: 'centers', value: '105', label: dict.hero.stats.centers },
 ];
 ---
 
-<section class="hero relative overflow-hidden">
+<section class="hero relative overflow-hidden" data-stats-lang={locale}>
   <div class="hero-bg-glow absolute inset-0 pointer-events-none" aria-hidden="true"></div>
 
   <div class="container-page relative pt-12 md:pt-20 lg:pt-24 pb-16 md:pb-24">
@@ -47,18 +47,18 @@ const stats = [
             <div class="hero-pattern" aria-hidden="true"></div>
             <div class="relative">
               <span class="text-[11.5px] font-semibold uppercase tracking-[0.14em] text-ink-950/70">Zero Risk</span>
-              <p class="mt-2 text-[28px] font-semibold tracking-[-0.02em] text-ink-950 leading-tight" data-counter="$42M+">$42M+</p>
+              <p class="mt-2 text-[28px] font-semibold tracking-[-0.02em] text-ink-950 leading-tight" data-stat="export_volume">$42M+</p>
               <p class="text-[13px] text-ink-950/70 mt-1">{dict.hero.stats.exportVolume}</p>
             </div>
           </div>
           <div class="hero-card hero-card-white col-span-1">
             <span class="text-[11.5px] font-semibold uppercase tracking-[0.14em] text-ink-400">Bilgi</span>
-            <p class="mt-2 text-[28px] font-semibold tracking-[-0.02em] text-ink-950 leading-tight" data-counter="520">520</p>
+            <p class="mt-2 text-[28px] font-semibold tracking-[-0.02em] text-ink-950 leading-tight" data-stat="bilgi_courses">520</p>
             <p class="text-[13px] text-ink-500 mt-1">{locale === 'uz' ? "IT-kurslar" : locale === 'ru' ? "IT-курсов" : "IT courses"}</p>
           </div>
           <div class="hero-card hero-card-white col-span-1">
             <span class="text-[11.5px] font-semibold uppercase tracking-[0.14em] text-ink-400">Jobs</span>
-            <p class="mt-2 text-[28px] font-semibold tracking-[-0.02em] text-ink-950 leading-tight" data-counter="2 500+">2 500+</p>
+            <p class="mt-2 text-[28px] font-semibold tracking-[-0.02em] text-ink-950 leading-tight" data-stat="jobs">2 500+</p>
             <p class="text-[13px] text-ink-500 mt-1">{dict.hero.stats.jobs}</p>
           </div>
           <div class="hero-card hero-card-dark col-span-2 sm:col-span-1">
@@ -79,7 +79,7 @@ const stats = [
     <div class="mt-14 md:mt-20 grid grid-cols-2 md:grid-cols-4 gap-y-8 gap-x-6 reveal" style="transition-delay: 220ms">
       {stats.map((s) => (
         <div class="flex flex-col gap-1 md:border-l md:border-hairline md:pl-6 first:border-l-0 first:pl-0">
-          <span class="text-[28px] md:text-[34px] font-semibold tracking-[-0.02em] text-ink-950 leading-none" data-counter={s.value}>
+          <span class="text-[28px] md:text-[34px] font-semibold tracking-[-0.02em] text-ink-950 leading-none" data-stat={s.key}>
             {s.value}
           </span>
           <span class="text-[13px] text-ink-500 mt-2">{s.label}</span>
@@ -130,3 +130,29 @@ const stats = [
     .hero-card { min-height: 160px; padding: 1.75rem; }
   }
 </style>
+
+<script>
+  import { fetchSiteStats } from '~/lib/stats.api';
+  import { observeCount } from '~/lib/count-up';
+
+  async function initStats() {
+    const els = Array.from(document.querySelectorAll<HTMLElement>('[data-stat]'));
+    if (!els.length) return;
+
+    const section = document.querySelector<HTMLElement>('[data-stats-lang]');
+    const lang = section?.dataset.statsLang || 'uz';
+
+    // Fetch CMS-managed values (best-effort); fall back to the server-rendered defaults.
+    const values = new Map<string, string>();
+    const stats = await fetchSiteStats(lang);
+    for (const s of stats) values.set(s.key, s.value);
+
+    els.forEach((el) => {
+      const key = el.dataset.stat || '';
+      const finalText = values.get(key) ?? (el.textContent || '').trim();
+      observeCount(el, finalText);
+    });
+  }
+
+  initStats();
+</script>
