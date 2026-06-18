@@ -143,6 +143,7 @@ const labels = {
   import { fetchNewsDetail, type PublicNewsDetail } from '~/lib/news.api';
 
   const HEX6 = /^#([0-9a-f]{6})$/i;
+  const UZ_MONTHS = ['yanvar', 'fevral', 'mart', 'aprel', 'may', 'iyun', 'iyul', 'avgust', 'sentabr', 'oktabr', 'noyabr', 'dekabr'];
   const CAL_SVG =
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" width="14" height="14"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9h18M8 2.5v4M16 2.5v4" stroke-linecap="round"/></svg>';
   const CHEVRON = (dir: 'left' | 'right') =>
@@ -165,8 +166,11 @@ const labels = {
       return;
     }
 
-    const formatDate = (iso: string) =>
-      new Date(iso).toLocaleDateString(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' });
+    const formatDate = (iso: string) => {
+      const d = new Date(iso);
+      if (lang === 'uz') return `${d.getDate()}-${UZ_MONTHS[d.getMonth()]}, ${d.getFullYear()}`;
+      return d.toLocaleDateString(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' });
+    };
 
     function render(news: PublicNewsDetail) {
       // Meta (category + date)
