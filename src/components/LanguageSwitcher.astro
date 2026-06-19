@@ -124,6 +124,17 @@ const order: Locale[] = ['uz', 'ru', 'en'];
 
 <script>
   function initLang() {
+    // Carry the current query string + hash onto the language links so switching
+    // locale keeps the page state — e.g. the news detail page reads ?slug=...
+    // (alternates() builds clean paths without the query).
+    const suffix = window.location.search + window.location.hash;
+    if (suffix) {
+      document.querySelectorAll<HTMLAnchorElement>('.lang-option').forEach((a) => {
+        const base = a.getAttribute('href') || '';
+        if (!base.includes('?') && !base.includes('#')) a.setAttribute('href', base + suffix);
+      });
+    }
+
     document.querySelectorAll<HTMLElement>('.lang-switcher').forEach((root) => {
       if ((root as any).__bound) return;
       (root as any).__bound = true;
