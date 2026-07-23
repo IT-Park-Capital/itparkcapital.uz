@@ -101,6 +101,9 @@ const labels = {
   #news-detail-root .news-detail-body p {
     font-size: 1.0625rem; line-height: 1.75; color: var(--color-ink-700); margin-bottom: 1.25rem;
   }
+  /* Inline formatting authored in the CMS (**bold**, *italic*) */
+  #news-detail-root .news-detail-body strong { font-weight: 650; color: var(--color-ink-900); }
+  #news-detail-root .news-detail-body em { font-style: italic; }
 
   /* === Quote === */
   #news-detail-root .news-quote {
@@ -170,6 +173,7 @@ const labels = {
 <script>
   import { fetchNewsDetail, type PublicNewsDetail } from '~/lib/news.api';
   import { loadImage } from '~/lib/skeleton-image';
+  import { appendInline } from '~/lib/inline-format';
 
   const HEX6 = /^#([0-9a-f]{6})$/i;
   const UZ_MONTHS = ['yanvar', 'fevral', 'mart', 'aprel', 'may', 'iyun', 'iyul', 'avgust', 'sentabr', 'oktabr', 'noyabr', 'dekabr'];
@@ -256,7 +260,7 @@ const labels = {
             const p = document.createElement('p');
             text.split('\n').forEach((line, i) => {
               if (i > 0) p.appendChild(document.createElement('br'));
-              p.appendChild(document.createTextNode(line));
+              appendInline(p, line);
             });
             bodyWrap.appendChild(p);
           });

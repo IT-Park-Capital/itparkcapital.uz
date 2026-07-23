@@ -4,6 +4,7 @@ import '~/styles/global.css';
 import Seo from '~/components/Seo.astro';
 import Header from '~/components/Header.astro';
 import Footer from '~/components/Footer.astro';
+import YandexMetrika from '~/components/YandexMetrika.astro';
 import { type Locale, getDict, HREFLANG_MAP } from '~/i18n';
 
 interface Props {
@@ -45,6 +46,7 @@ const baseOrganization = {
   areaServed: { '@type': 'Country', name: 'Uzbekistan' },
   address: {
     '@type': 'PostalAddress',
+    streetAddress: 'Muminov ko\'chasi, 7/2',
     addressCountry: 'UZ',
     addressLocality: 'Tashkent',
     addressRegion: 'Tashkent',
@@ -79,6 +81,7 @@ const finalJsonLd = jsonLd
     />
   </head>
   <body class="antialiased">
+    <YandexMetrika />
     <Header locale={locale} pathname={pathname} dict={dict} />
     <main id="main">
       <slot />

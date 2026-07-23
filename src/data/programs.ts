@@ -53,8 +53,13 @@ export type ProgramData = {
   order: number;
   accent: 'green' | 'dark' | 'light';
   icon: 'building' | 'globe' | 'graduation' | 'shield' | 'grid' | 'handshake';
+  /** Where the "Apply" CTA points. Defaults to the IT Park Capital cabinet. */
+  applyUrl?: string;
   content: Record<Locale, ProgramContent>;
 };
+
+/** IT Park Capital resident cabinet — the default destination of every "Apply" CTA. */
+export const DEFAULT_APPLY_URL = 'https://my.itparkcapital.uz';
 
 export const PROGRAMS: ProgramData[] = [
   {
@@ -323,28 +328,30 @@ export const PROGRAMS: ProgramData[] = [
     order: 4,
     accent: 'dark',
     icon: 'shield',
+    // State programme — applications go through the IT Park resident cabinet.
+    applyUrl: 'https://my.it-park.uz',
     content: {
       uz: {
         kind: 'zero-risk',
-        title: "Incentives (Zero Risk) dasturi",
+        title: "Zero Risk dasturi",
         shortTitle: "Zero Risk",
         summary: "IT va BPO kompaniyalarni O'zbekistonga jalb qilish — ofis, jihoz va kompensatsiyalar bilan.",
-        intro: "Incentives (Zero Risk) — IT va BPO kompaniyalarni O'zbekistonga jalb qilishga qaratilgan davlat dasturi bo'lib, IT-kompaniyalarga start bosqichida moliyaviy xatarlarni minimallashtirgan holda o'sish va kengayish imkonini beradi. Dastur jamoa, infratuzilma va rivojlanishga yo'naltirilgan investitsiyalardagi asosiy yuklamalarni kamaytiradi. Dasturning asosiy maqsadi — IT va BPO kompaniyalarga O'zbekiston bozoriga kirish va minimal xatarlar bilan kengayish imkoniyatini yaratish.",
+        intro: "Zero Risk — IT va BPO kompaniyalarni O'zbekistonga jalb qilishga qaratilgan davlat dasturi bo'lib, IT-kompaniyalarga start bosqichida moliyaviy xatarlarni minimallashtirgan holda o'sish va kengayish imkonini beradi. Dastur jamoa, infratuzilma va rivojlanishga yo'naltirilgan investitsiyalardagi asosiy yuklamalarni kamaytiradi. Dasturning asosiy maqsadi — IT va BPO kompaniyalarga O'zbekiston bozoriga kirish va minimal xatarlar bilan kengayish imkoniyatini yaratish.",
         benefits: [
           "12 oygacha barcha hududlarda bepul ofis maydonlari (Toshkentdan tashqari)",
           "Texnik jihozlar bilan ta'minlash (12 oydan so'ng sotib olish majburiyati bilan)",
           "Ish haqi kompensatsiyasi — 15% gacha",
-          "Xodimlarni o'qitish xarajatlari kompensatsiyasi — 50% gacha ($6 000 dan oshmagan holda)",
-          "Xodimlarni yollash xarajatlari kompensatsiyasi — 50% gacha (har bir xodim uchun $600 dan oshmagan holda)",
+          "Xodimlarni o'qitish xarajatlari kompensatsiyasi — 50% gacha (BHMning 200 barobaridan ko'p bo'lmagan qismi)",
+          "Xodimlarni yollash xarajatlari kompensatsiyasi — 50% gacha (BHMning 20 barobaridan ko'p bo'lmagan qismi)",
         ],
         criteria: [
-          "Daromadning 50% dan ortig'i IT-xizmatlar eksportidan shakllanishi",
+          "Daromadning 50% dan ortig'i xizmatlar eksportidan shakllanishi",
           "Kamida $500 000 miqdorida amaldagi eksport shartnomasi mavjud bo'lishi",
           "Bosh kompaniya aylanmasi — $1 mln dan boshlab",
         ],
         results: [
-          { value: '95', label: "qabul qilingan ariza" },
-          { value: '74', label: "qabul qilingan kompaniya" },
+          { value: '100+', label: "qabul qilingan ariza" },
+          { value: '83', label: "qabul qilingan kompaniya" },
           { value: '2 500+', label: "yaratilgan ish o'rni" },
           { value: '3 500', label: "yil oxiriga rejalashtirilgan ish o'rni" },
           { value: '$800K+', label: "xarid qilingan jihozlar qiymati" },
@@ -353,16 +360,16 @@ export const PROGRAMS: ProgramData[] = [
       },
       ru: {
         kind: 'zero-risk',
-        title: "Программа Incentives (Zero Risk)",
+        title: "Программа Zero Risk",
         shortTitle: "Zero Risk",
         summary: "Привлечение IT и BPO компаний в Узбекистан — офис, оборудование и компенсации.",
-        intro: "Incentives (Zero Risk) — государственная программа привлечения IT и BPO компаний в Узбекистан, позволяет IT-компаниям расти и масштабироваться с минимизацией финансовых рисков на старте, снижая ключевые нагрузки при инвестициях в команду, инфраструктуру и развитие. Главная цель программы — обеспечить IT и BPO компаниям возможность войти на рынок Узбекистана и масштабироваться с минимальными рисками.",
+        intro: "Zero Risk — государственная программа привлечения IT и BPO компаний в Узбекистан, позволяет IT-компаниям расти и масштабироваться с минимизацией финансовых рисков на старте, снижая ключевые нагрузки при инвестициях в команду, инфраструктуру и развитие. Главная цель программы — обеспечить IT и BPO компаниям возможность войти на рынок Узбекистана и масштабироваться с минимальными рисками.",
         benefits: [
           "Бесплатные офисные площади на срок до 12 месяцев во всех регионах (кроме Ташкента)",
           "Оснащение техническим оборудованием (с обязательством выкупа через 12 месяцев)",
           "Компенсация заработной платы — до 15%",
-          "Компенсация расходов на обучение сотрудников — до 50% (но не более $6 000)",
-          "Компенсация расходов на подбор персонала — до 50% (не более $600 на сотрудника)",
+          "Компенсация расходов на обучение сотрудников — до 50% (не более 200-кратного размера БРВ)",
+          "Компенсация расходов на подбор персонала — до 50% (не более 20-кратного размера БРВ)",
         ],
         criteria: [
           "Более 50% выручки с экспорта услуг",
@@ -370,8 +377,8 @@ export const PROGRAMS: ProgramData[] = [
           "Оборот головной компании — от $1 млн",
         ],
         results: [
-          { value: '95', label: "принятая заявка" },
-          { value: '74', label: "принятых компаний" },
+          { value: '100+', label: "принятых заявок" },
+          { value: '83', label: "принятых компаний" },
           { value: '2 500+', label: "созданных рабочих мест" },
           { value: '3 500', label: "рабочих мест к концу года" },
           { value: '$800K+', label: "стоимость оборудования" },
@@ -380,25 +387,25 @@ export const PROGRAMS: ProgramData[] = [
       },
       en: {
         kind: 'zero-risk',
-        title: "Incentives (Zero Risk) Programme",
+        title: "Zero Risk Programme",
         shortTitle: "Zero Risk",
         summary: "Attracting IT and BPO companies to Uzbekistan — with offices, equipment, and subsidies.",
-        intro: "Incentives (Zero Risk) — is a government programme designed to attract IT and BPO companies to Uzbekistan. It enables IT companies to grow and scale up whilst minimising financial risks at the outset, reducing the key burdens associated with investing in staff, infrastructure and development. The main objective of the programme is to provide IT and BPO companies with the opportunity to enter the Uzbek market and scale up with minimal risk.",
+        intro: "Zero Risk — is a government programme designed to attract IT and BPO companies to Uzbekistan. It enables IT companies to grow and scale up whilst minimising financial risks at the outset, reducing the key burdens associated with investing in staff, infrastructure and development. The main objective of the programme is to provide IT and BPO companies with the opportunity to enter the Uzbek market and scale up with minimal risk.",
         benefits: [
           "Free office space for up to 12 months in all regions (except Tashkent)",
           "Provision of technical equipment (with an obligation to purchase after 12 months)",
           "Salary subsidy — up to 15%",
-          "Reimbursement of staff training costs — up to 50% (but not exceeding $6,000)",
-          "Reimbursement of recruitment costs — up to 50% (up to $600 per employee)",
+          "Reimbursement of staff training costs — up to 50% (no more than 200 times the base calculation value)",
+          "Reimbursement of recruitment costs — up to 50% (no more than 20 times the base calculation value)",
         ],
         criteria: [
-          "Over 50% of revenue from the export of IT services",
+          "Over 50% of revenue from the export of services",
           "A valid export contract worth $500,000 or more",
           "Parent company turnover — from $1 million",
         ],
         results: [
-          { value: '95', label: "applications accepted" },
-          { value: '74', label: "companies accepted" },
+          { value: '100+', label: "applications accepted" },
+          { value: '83', label: "companies accepted" },
           { value: '2,500+', label: "jobs created" },
           { value: '3,500', label: "jobs planned by year-end" },
           { value: '$800K+', label: "equipment value" },

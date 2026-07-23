@@ -1,6 +1,6 @@
 ---
 import { type Locale, getDict, localePath } from '~/i18n';
-import { getProgram, programsOrdered, type ProgramSlug } from '~/data/programs';
+import { getProgram, programsOrdered, DEFAULT_APPLY_URL, type ProgramSlug } from '~/data/programs';
 import Base from '~/layouts/Base.astro';
 import Icon from '~/components/Icon.astro';
 import CtaBanner from '~/components/CtaBanner.astro';
@@ -15,6 +15,7 @@ const dict = getDict(locale);
 const program = getProgram(slug);
 const content = program.content[locale];
 const related = programsOrdered().filter((p) => p.slug !== slug).slice(0, 3);
+const applyUrl = program.applyUrl ?? DEFAULT_APPLY_URL;
 
 const pageTitle = `${content.title} — IT Park Capital`;
 const description = content.summary;
@@ -80,7 +81,7 @@ const heroAccentClass =
           </p>
 
           <div class="hero-actions reveal" style="transition-delay: 220ms">
-            <a href="https://my.itparkcapital.uz" target="_blank" rel="noopener noreferrer" class="hero-btn hero-btn-primary">
+            <a href={applyUrl} target="_blank" rel="noopener noreferrer" class="hero-btn hero-btn-primary">
               {dict.programs.applyNow}
               <Icon name="arrow-right" class="h-4 w-4" />
             </a>
