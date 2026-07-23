@@ -6,6 +6,7 @@ import ProgramsGrid from '~/components/ProgramsGrid.astro';
 import ResultsSection from '~/components/ResultsSection.astro';
 import AboutTeaser from '~/components/AboutTeaser.astro';
 import CtaBanner from '~/components/CtaBanner.astro';
+import MapSection from '~/components/MapSection.astro';
 
 interface Props {
   locale: Locale;
@@ -34,4 +35,5 @@ const homeJsonLd = {
   <ResultsSection locale={locale} dict={dict} />
   <AboutTeaser locale={locale} dict={dict} />
   <CtaBanner locale={locale} dict={dict} />
+  <MapSection locale={locale} dict={dict} />
 </Base>
